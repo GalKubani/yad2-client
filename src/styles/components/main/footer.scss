@@ -1,0 +1,28 @@
+.footer{
+    padding: 50px 0 10px;
+    color: #fff;
+    text-align: center!important;
+    background: #363636;
+    p{
+        color: #999;
+        font-size: .875rem;
+        margin: 20px auto;
+        line-height: 1.0625rem;
+        width: 840px;
+        font-weight: 400;
+    }
+}
+.footer__nav{
+    width:70%;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    a{
+        @extend %a-nav;
+    }
+    .footer-nav{
+        font-weight: 700;
+    }
+}
