@@ -1,0 +1,47 @@
+.location{
+    min-width: 450px;
+    right: 254px;
+    padding: 0px;
+    box-shadow: 0 0 0 0 black;
+}
+.location-list{
+    width: 100%;
+    max-width: 100%;
+    border: 1px solid #ccc;
+    .location-list-title{
+        color: #989898;
+        font-size: 14px;
+        line-height: 30px;
+        padding: 0 10px;
+
+    }
+}
+
+.location-option{
+    max-width: 100%;
+    padding: 11px 10px;
+    cursor: pointer;
+    width: 450px;
+    height: 40px;
+    .bold{
+        font-weight: 700;
+    }
+}
+.location-option:hover{
+    background-color: #eee;
+}
+.location-category{
+    text-align: left;
+    position: relative;
+    top: -18.4px;
+    color: grey;
+    font-family: Rubik,sans-serif;
+}
+.category-title{
+    font-weight: 700;
+    background-color: #f4f4f4;
+    font-size: 14px;
+    line-height: 30px;
+    padding: 0 10px;
+    max-width: 100%;
+}

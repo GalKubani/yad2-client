@@ -11,8 +11,8 @@
     width: 100%;
     padding: 20px;
     background-color: #fff;
-    box-shadow: 0 2px 6px 0 rgba(0 ,0, 0 , 10%);
-    z-index: 350;
+    box-shadow: 0 2px 6px 0 rgba(0 ,0, 0 , 0.1);
+    z-index: 9;
 }
 li,ul{
     list-style: none;
@@ -49,6 +49,21 @@ li,ul{
     max-width: 960px;
     vertical-align: top;
     margin: 0 auto;
+}
+.search-bar-header{
+    display: flex;
+    justify-content: space-between;
+}
+.searchbar-header-button{
+    font-size: .85rem;
+    line-height: 1.25rem;
+    height: 30px;
+    width: 215px;
+    padding: 0;
+    background-color: #fff;
+    color: #ff7100;
+    font-weight: 500;
+    border-color: #ff7100;
 }
 .default-button{
     display: flex;

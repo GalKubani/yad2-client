@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
+import { getLocationsFromDB } from '../../server/db'
 import AdvancedSearch from './AdvancedSearch'
+import AssetDropdown from './AssetDropdown'
+import LocationData from './LocationData'
+import PriceModal from './PriceModal'
 
 
 const roomRange = ["הכל"]
@@ -9,19 +13,21 @@ const SearchBar = () => {
     const [currentRoomRange, setCurrentRoomRange] = useState(roomRange)
     const [roomMinimumRange, setRoomMinimumRange] = useState()
     const [roomMaximumRange, setRoomMaximumRange] = useState()
+    const [isPriceValid, setIsPriceValid] = useState(true)
+    const [didClickOnAssets, setDidClickOnAssets] = useState(false)
     const [didClickAdvancedSearch, setDidClickAdvancedSearch] = useState(false)
+    const [currentSearchValue, setCurrentSearchValue] = useState("")
+    const [streetOptionsShown, setStreetOptionsShown] = useState([])
+    const [cityOptionsShown, setCityOptionsShown] = useState([])
+    const [neighborhoodOptionsShown, setNeighborhoodOptionsShown] = useState([])
 
     const updateRoomRangeArray = (min = roomMinimumRange, max = roomMaximumRange) => {
         let newRoomRange = []
-        console.log(min)
-        console.log(max)
         if (min === "הכל") { return roomRange }
         if (min === 1) { newRoomRange.push("הכל") }
         if (min < 1) { min = 1 }
         min *= 1
-        for (; min <= max; min += 0.5) {
-            newRoomRange.push(min)
-        }
+        for (; min <= max; min += 0.5) { newRoomRange.push(min) }
         if (newRoomRange.length === 1) { return roomRange }
         return newRoomRange
     }
@@ -91,36 +97,68 @@ const SearchBar = () => {
         for (let arrow of arrows) { arrow.classList.remove("arrow-click") }
         for (let content of dropdown) { content.style.display = "none" }
     }
+    const selectOptionClick = (e) => {
+        e.stopPropagation()
+        // will nn to account for which category was selected
+        if (e.target.classList.contains("location-category")) {
+            e.target.parentElement.parentElement.parentElement.previousElementSibling.value = e.target.previousElementSibling.innerText
+            e.target.parentElement.parentElement.parentElement.style.display = "none"
+            return
+        }
+        e.target.parentElement.parentElement.previousElementSibling.value = e.target.children[0].innerText
+        e.target.parentElement.parentElement.style.display = "none"
+    }
+    const onLocationInput = async (e) => {
+        e.preventDefault()
+        if (e.target.value.length < 2) {
+            e.target.nextElementSibling.style.display = "none"
+            return
+        }
+        let locationValue = e.target.value
+        if (!locationValue.trim() || !locationValue) { return }
+        setCurrentSearchValue(locationValue)
+        await getLocationsFromDB(locationValue).then((res) => {
+            setNeighborhoodOptionsShown(res.neighborhoods.splice(0, 4))
+            setCityOptionsShown(res.cityNames.splice(0, 4))
+            setStreetOptionsShown(res.streetNames.splice(0, 4))
+        })
+        e.target.nextElementSibling.style.display = "flex"
+    }
+    const onMaxPriceEntry = (e) => {
+        if (e.target.value < 30000 && e.target.value) { setIsPriceValid(false) }
+        else { setIsPriceValid(true) }
+    }
+    const closeModal = () => {
+        setIsPriceValid(true)
+    }
+    const onAssetsClick = () => {
+        setDidClickOnAssets(!didClickOnAssets)
+    }
     return (
         <div onClick={onSearchbarClick}>
             <form className="search-bar">
-                <h3>איזה נכס למכירה תרצו לחפש?</h3>
+                <div className="search-bar-header">
+                    <h3>איזה נכס למכירה תרצו לחפש?</h3>
+                    <button className="searchbar-header-button" type="button">קבלו התראות על חיפוש במייל</button>
+                </div>
+
+
                 <ul className="search-columns">
                     <li className="search-column">
                         <label>חפשו אזור, עיר, שכונה או רחוב</label>
-                        <input type="text" autoComplete="off" placeholder="לדוגמה: רמות, באר שבע" className="text_input" />
-                        {/* will nn to implement search somehow */}
+                        <input onInput={onLocationInput} type="text" autoComplete="off" placeholder="לדוגמה: רמות, באר שבע" className="text_input" />
+                        <div className="dropdown_content location">
+                            <LocationData currentSearchValue={currentSearchValue}
+                                neighborhoodOptionsShown={neighborhoodOptionsShown}
+                                cityOptionsShown={cityOptionsShown}
+                                streetOptionsShown={streetOptionsShown}
+                                selectOptionClick={selectOptionClick} />
+                        </div>
                     </li>
                     <li className="search-column">
                         <label>סוג נכס</label>
-                        <button onClick={onRoomsClick} className="text_input placeholder bigger">בחרו סוג נכסים <div className="arrow">^</div></button>
-                        {/* will nn to add checkbox as dropped menu for all options, maybe new component */}
-                        <div className="dropdown_content">
-                            <ul>
-                                <li className="asset-checkbox">
-
-                                </li>
-                                <li className="asset-checkbox">
-
-                                </li>
-                                <li className="asset-checkbox">
-
-                                </li>
-                                <li className="asset-checkbox">
-
-                                </li>
-                            </ul>
-                        </div>
+                        <button onClick={onAssetsClick} className="text_input placeholder bigger">בחרו סוג נכסים <div className="arrow">^</div></button>
+                        {didClickOnAssets ? <AssetDropdown /> : ""}
                     </li>
                     <li className="search-column">
                         <div><label>חדרים</label></div>
@@ -148,10 +186,10 @@ const SearchBar = () => {
                     </li>
                     <li className="search-column">
                         <div><label>מחיר</label></div>
-                        {/* will nn to make sure input will be valid */}
                         <div className="price-wrapper">
                             <input type="text" autoComplete="off" placeholder="ממחיר" inputMode="numeric" maxLength="10" className="text_input smaller" />
-                            <input type="text" autoComplete="off" placeholder="עד מחיר" inputMode="numeric" maxLength="10" className="text_input smaller" />
+                            <input onBlur={onMaxPriceEntry} type="text" autoComplete="off" placeholder="עד מחיר" inputMode="numeric" maxLength="10" className="text_input smaller" />
+                            {isPriceValid ? "" : <PriceModal closeModal={closeModal} />}
                         </div>
                     </li>
                     <li className="search-column advanced-search">
