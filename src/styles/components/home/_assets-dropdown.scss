@@ -27,6 +27,31 @@
     border: 1px solid #363636;
     border-radius: 2px;
 }
+.checkmark:hover{
+    border: 1px solid #ff7100;
+    cursor: pointer;
+}
+.checkmark::after{
+    content: "";
+    font-style: normal;
+    font-weight: 400;
+    font-feature-settings: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    color: #fff;
+    display: none;
+    font-size: .55em;
+    font-weight: 800;
+    position: absolute;
+    top: .4em;
+    left: .2em;
+
+}
+.checkmark:checked{
+    background-color: #ff7100;
+    border: 1px solid #ff7100;
+}
 .checkbox-background{
     height: 100%;
 

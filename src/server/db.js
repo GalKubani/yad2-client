@@ -9,19 +9,19 @@ export const getLocationsFromDB = async (searchValue) => {
         console.log(err);
     }
 };
-export const subscribeToSite = async (userData) => {
+export const subscribeToSite = async (email, password) => {
     try {
-        const res = await Axios.post(DB_URL + `/users/add`, userData)
+        const res = await Axios.post(DB_URL + `/users/add`, { email, password })
         return res.data
     } catch (err) {
-        console.log(err)
+        throw new Error(err);
     }
 }
 
 export const loginToDB = async (email, password) => {
     try {
         const res = await Axios.post(DB_URL + "/users/login", { email, password })
-        return res;
+        return res.data;
     } catch (err) {
         throw new Error(err);
     }

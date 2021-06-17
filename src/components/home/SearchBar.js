@@ -91,7 +91,6 @@ const SearchBar = () => {
     }
     const onSearchbarClick = (e) => {
         e.preventDefault()
-        setDidClickAdvancedSearch(false)
         let dropdown = document.getElementsByClassName("dropdown_content")
         let arrows = document.getElementsByClassName("arrow-click")
         for (let arrow of arrows) { arrow.classList.remove("arrow-click") }
@@ -163,7 +162,7 @@ const SearchBar = () => {
                     <li className="search-column">
                         <div><label>חדרים</label></div>
                         <button onClick={onRoomsClick} className="text_input smaller placeholder"><div className="arrow">^</div> חדרים </button>
-                        <div className="dropdown_content">
+                        <div className="dropdown_content room-range">
                             <input onClick={onRoomsClick} type="text" autoComplete="off" placeholder="מ-" className="text_input" />
                             <div onClick={onRoomsClick} className="arrow from">^</div>
                             <div className="dropdown_content inside">
@@ -197,7 +196,12 @@ const SearchBar = () => {
                         {didClickAdvancedSearch ? <AdvancedSearch /> : ""}
                     </li>
                     <li className="search-columns">
-                        <button type="submit" className="default-button">חיפוש</button>
+                        <button type="submit" className="default-button">
+                            <svg className="svg-search-icon" role="img" viewBox="0 0 19.9 19.7">
+                                <g fill="none" stroke="white"><path strokeLinecap="square" d="M18.5 18.3l-5.4-5.4" /><circle cx="8" cy="8" r="7" /></g>
+                            </svg>     <span>חיפוש</span>
+                        </button>
+
                     </li>
                 </ul>
             </form>

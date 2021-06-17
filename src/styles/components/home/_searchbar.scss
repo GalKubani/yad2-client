@@ -57,12 +57,12 @@ li,ul{
 .searchbar-header-button{
     font-size: .85rem;
     line-height: 1.25rem;
+    font-weight: 6s00;
     height: 30px;
     width: 215px;
     padding: 0;
     background-color: #fff;
     color: #ff7100;
-    font-weight: 500;
     border-color: #ff7100;
 }
 .default-button{
@@ -103,6 +103,9 @@ li,ul{
         min-width: inherit;
     }
 }
+.room-range{
+    right:430px;
+}
 .arrow{
     position: absolute;
     float: left;
@@ -119,10 +122,10 @@ li,ul{
     width: 95px;
 }
 .bigger{
-    width: 170px;
+    width: 140px;
     .arrow{
-        right:310px;
-        top:142px;  
+        right:280px;
+        top:150px;  
     }
 }
 .placeholder{

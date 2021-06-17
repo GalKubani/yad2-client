@@ -1,11 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useDebugValue, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import validator from "validator";
 import { loginUser } from "../../actions/loginActions";
 import { LoginContext } from "../../context/LoginContext";
 import { saveUserOnCookie } from "../../cookies/cookies";
 import { loginToDB } from "../../server/db";
 
-const LoginForm = ({ setIsLoginMode }) => {
+const LoginForm = ({ closeModal, setIsLoginMode }) => {
     const { loginDispatch } = useContext(LoginContext)
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -15,20 +16,18 @@ const LoginForm = ({ setIsLoginMode }) => {
     const [errorMessage, setErrorMessage] = useState("")
     const [passwordErrorMessage, setPasswordErrorMessage] = useState("")
 
-    const history = useHistory()
 
     const onBlueEmailInput = (e) => {
         const emailValue = e.target.value.trim();
         setEmail(emailValue);
-        if (emailValue === "") {
+        if (emailValue === "" || !validator.isEmail(emailValue)) {
             setIsEmailValid(false)
-            setErrorMessage("שדה חובה")
+            if (emailValue !== "") { setErrorMessage("אימייל לא תקין") }
+            else { setErrorMessage("שדה חובה") }
             e.target.classList.remove("valid-input")
             e.target.classList.add("invalid-input")
+            setIsFormValid(false)
         }
-        // else if(emailValue){
-
-        // }
         else {
             setIsEmailValid(true)
             e.target.classList.remove("invalid-input")
@@ -54,18 +53,19 @@ const LoginForm = ({ setIsLoginMode }) => {
 
     }
     const onSubmitForm = async (event) => {
-        event.preventDefault()
-        console.log("login form!", email, password)
         try {
             await loginToDB(email, password).then(
                 (userData) => {
                     if (userData) {
                         saveUserOnCookie(userData)
-                        loginDispatch(loginUser(userData, userData.data.token))
-                        history.push("/")
+                        console.log(userData.user)
+                        loginDispatch(loginUser(userData.user, userData.token))
+
+                        closeModal()
                     }
                 })
         } catch (err) {
+            event.preventDefault();
             if (err.message === "Error: Request failed with status code 404") {
                 setIsEmailValid(false)
                 setErrorMessage("Email not found")
@@ -100,6 +100,7 @@ const LoginForm = ({ setIsLoginMode }) => {
                         <input className="login-form-input" type="password" placeholder="הקלד סיסמה" onBlur={onBluePasswordInput} />
                         {!isPasswordInputValid && <div className="invalid-message">{passwordErrorMessage}</div>}
                     </div>
+                    <div className="forgot-pass"> שכחתי סיסמה</div>
                 </div>
                 <div className="login-form-button">
                     <button className="submit-form-button" type="submit" disabled={isFormInvalid()}>התחבר</button>

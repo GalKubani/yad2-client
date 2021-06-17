@@ -6,102 +6,104 @@ import { LoginContext } from '../../context/LoginContext';
 import { subscribeToSite } from '../../server/db';
 import { saveUserOnCookie } from '../../cookies/cookies'
 
-const SubscribeForm = ({ setIsLoginMode }) => {
+const SubscribeForm = ({ closeModal, setIsLoginMode }) => {
     const { loginDispatch } = useContext(LoginContext);
 
-    const [inputClasses, setInputClasses] = useState(["", "", "", ""]);
-    const [invalidMessages, setInvalidMessages] = useState(["", "", "", ""]);
-    const [validInputs, setValidInputs] = useState([false, true, false, false, false]);
+    const [isEmailInputValid, setIsEmailValid] = useState(true)
+    const [isPasswordInputValid, setIsPasswordValid] = useState(true)
+    const [isRepeatPasswordInputValid, setIsRepeatPasswordInputValid] = useState(true)
+
+    const [isFormValid, setIsFormValid] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState("")
+    const [passwordRepeatErrorMessage, setPasswordRepeatErrorMessage] = useState("")
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [username, setUsername] = useState("");
 
-    const history = useHistory();
-
-    const isFormInvalid = () => {
-        return validInputs.includes(false);
-    };
-
-    const validateInput = (
-        value,
-        inputindex,
-        isValueValidFunc,
-        setValue,
-        missingValueMessage,
-        invalidValueMessage
-    ) => {
-        const setStateOfInputs = (message, inputClass, isvalidInput) => {
-            const newInavlidMessages = [...invalidMessages];
-            const newInputClasses = [...inputClasses];
-            const newValidInputs = [...validInputs];
-            newInavlidMessages[inputindex] = message;
-            setInvalidMessages(newInavlidMessages);
-            newInputClasses[inputindex] = inputClass;
-            setInputClasses(newInputClasses);
-            newValidInputs[inputindex] = isvalidInput;
-            setValidInputs(newValidInputs);
-        };
-
-        if (value.length > 0) {
-            if (isValueValidFunc(value)) {
-                setStateOfInputs("", "", true);
-                setValue(value);
-            } else {
-                setStateOfInputs(invalidValueMessage, "input-invalid", false);
-            }
-        } else {
-            setStateOfInputs(missingValueMessage, "input-invalid", false);
+    const onBlueEmailInput = (e) => {
+        const emailValue = e.target.value.trim();
+        setEmail(emailValue);
+        if (emailValue === "" || !validator.isEmail(emailValue)) {
+            setIsEmailValid(false)
+            if (emailValue !== "") { setErrorMessage("אימייל לא תקין") }
+            else { setErrorMessage("שדה חובה") }
+            e.target.classList.remove("valid-input")
+            e.target.classList.add("invalid-input")
+            setIsFormValid(false)
         }
-    };
+        else {
+            setIsEmailValid(true)
+            e.target.classList.remove("invalid-input")
+            e.target.classList.add("valid-input")
+            if (checkIfFormValid()) { setIsFormValid(true) }
+        }
+    }
 
+    const onBluePasswordInput = (e) => {
+        const passwordValue = e.target.value.trim();
+        setPassword(passwordValue);
+        if (passwordValue === "") {
+            setIsPasswordValid(false)
+            setPasswordErrorMessage("שדה חובה")
+            e.target.classList.remove("valid-input")
+            e.target.classList.add("invalid-input")
+            setIsFormValid(false)
+        }
+        else {
+            setIsPasswordValid(true)
+            e.target.classList.remove("invalid-input")
+            e.target.classList.add("valid-input")
+            if (checkIfFormValid()) { setIsFormValid(true) }
+        }
 
-    const onBlurEmail = (event) => {
-        const newEmail = event.target.value.trim();
+    }
+    const onBluePasswordInputRepeat = (e) => {
+        const passwordValue = e.target.value.trim();
+        setPassword(passwordValue);
+        if (passwordValue === "" || passwordValue !== password) {
+            setIsRepeatPasswordInputValid(false)
+            e.target.classList.remove("valid-input")
+            e.target.classList.add("invalid-input")
+            if (passwordValue !== password) { setPasswordRepeatErrorMessage("הסיסמאות אינן זהות") }
+            else { setPasswordRepeatErrorMessage("שדה חובה") }
+            setIsFormValid(false)
+        }
+        else if (passwordValue === password) {
+            setIsRepeatPasswordInputValid(true)
+            e.target.classList.remove("invalid-input")
+            e.target.classList.add("valid-input")
+            if (checkIfFormValid()) { setIsFormValid(true) }
+        }
 
-        validateInput(
-            newEmail,
-            2,
-            validator.isEmail,
-            setEmail,
-            "You must enter your email",
-            "Email invalid"
-        );
-    };
+    }
+    const isFormInvalid = () => {
+        return !isFormValid
+    }
+    const checkIfFormValid = () => {
+        return isEmailInputValid && isPasswordInputValid && isRepeatPasswordInputValid && password !== ""
+    }
+    const onSubscribe = async (event) => {
 
-    const onBlurPassword = (event) => {
-        const newPassword = event.target.value.trim();
-        const isPasswordValid = (value) => {
-            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{6,}$/;
-            return passwordRegex.test(value);
-        };
-        validateInput(
-            newPassword,
-            3,
-            isPasswordValid,
-            setPassword,
-            "You must enter password",
-            "Password must contain capital and regular characters, numbers and must have at least 6 characters"
-        );
-    };
-
-    const onBlurPasswordRepeated = (event) => {
-        const passwordRepeated = event.target.value.trim();
-        const isPasswordRepeatedValid = (value) => {
-            return password === passwordRepeated;
-        };
-        validateInput(
-            passwordRepeated,
-            4,
-            isPasswordRepeatedValid,
-            () => { },
-            "You must enter again your password",
-            "The two passwords not identical"
-        );
-    };
-
-    const onSubmitform = (event) => {
-        event.preventDefault();
-
+        try {
+            await subscribeToSite(email, password).then(
+                (userData) => {
+                    loginDispatch(loginUser(userData));
+                    saveUserOnCookie(userData)
+                    closeModal()
+                },
+                (err) => {
+                    if (err.message === "EMAIL_EXISTS") {
+                        setIsEmailValid(false)
+                        setIsFormValid(false)
+                        setErrorMessage("מייל קיים במערכת")
+                    }
+                }
+            );
+        } catch (err) {
+            event.preventDefault();
+            console.log(err)
+        }
 
     };
 
@@ -110,19 +112,32 @@ const SubscribeForm = ({ setIsLoginMode }) => {
     };
 
     return (
-        <div className="login-form">
-            <h3>Subscribe</h3>
-            <form onSubmit={onSubmitform}>
-                <input placeholder="Email" className={inputClasses[2]} onBlur={onBlurEmail} />
-                {invalidMessages[2] !== "" && <div className="invalid-message">{invalidMessages[2]}</div>}
-                <input type="password" placeholder="Password" className={inputClasses[3]} onBlur={onBlurPassword} />
-                {invalidMessages[3] !== "" && <div className="invalid-message">{invalidMessages[3]}</div>}
-                <input type="password" placeholder="Repeat on password" className={inputClasses[4]} onBlur={onBlurPasswordRepeated} />
-                {invalidMessages[4] !== "" && <div className="invalid-message">{invalidMessages[4]}</div>}
-
-                <div className="login-form__nav">
-                    <button type="submit" disabled={isFormInvalid()}>Submit</button>
-                    <div onClick={onClickLogin}>Login</div>
+        <div className="login-wrapper">
+            <div className="header-login">
+                <h3>הרשמה</h3>
+                <p>הזן את הפרטים כדי להרשם</p>
+            </div>
+            <form className="login-form" onSubmit={onSubscribe}>
+                <div className="input-wrapper">
+                    <div className="i-container">
+                        <div className="input-title"><label>כתובת מייל</label></div>
+                        <input className="login-form-input" placeholder="your@mail.com" onBlur={onBlueEmailInput} autoComplete="on" />
+                        {!isEmailInputValid && <div className="invalid-message">{errorMessage}</div>}
+                    </div>
+                    <div className="i-container">
+                        <div className="input-title"><label>סיסמה</label></div>
+                        <input className="login-form-input" type="password" placeholder="הקלד סיסמה" onBlur={onBluePasswordInput} />
+                        {!isPasswordInputValid && <div className="invalid-message">{passwordErrorMessage}</div>}
+                    </div>
+                    <div className="i-container">
+                        <div className="input-title"></div>
+                        <input className="login-form-input" type="password" placeholder="חזור על הסיסמה שהקלדת" onBlur={onBluePasswordInputRepeat} />
+                        {!isRepeatPasswordInputValid && <div className="invalid-message">{passwordRepeatErrorMessage}</div>}
+                    </div>
+                </div>
+                <div className="login-form-button">
+                    <button className="submit-form-button" type="submit" disabled={isFormInvalid()}>הרשם</button>
+                    <div >כבר רשום? <span className="change-mode" onClick={onClickLogin}>להתחברות</span></div>
                 </div>
             </form>
         </div>
