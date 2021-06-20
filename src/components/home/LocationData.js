@@ -21,7 +21,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
                         optionName = optionName.split(currentSearchValue, 2)
                         jsx = (<span>{optionName[0]}<span className="bold">{currentSearchValue}</span>{optionName[1]}, {optionNameAndCity[1]}</span>)
                     }
-                    else { return }
+                    else { return ("") }
                 }
                 return (
                     <li onClick={(selectOptionClick)} key={option} className="location-option">
@@ -46,7 +46,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
                         optionName = optionName.split(currentSearchValue, 2)
                         jsx = (<span>{optionName[0]}<span className="bold">{currentSearchValue}</span>{optionName[1]}</span>)
                     }
-                    else { return }
+                    else { return ("") }
                 }
                 return (
                     <li onClick={(selectOptionClick)} key={option} className="location-option">
@@ -56,7 +56,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
             })}
             {streetOptionsShown.length > 0 ? <li className="category-title">רחוב</li> : ""}
             {streetOptionsShown.map((option) => {
-                if (option.length > 26) { return }
+                if (option.length > 26) { return ("") }
                 let optionNameAndCity = option.split("//")
                 let optionName = optionNameAndCity[0]
                 let jsx
@@ -74,7 +74,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
                         optionName = optionName.split(currentSearchValue, 2)
                         jsx = (<span>{optionName[0]}<span className="bold">{currentSearchValue}</span>{optionName[1]}, {optionNameAndCity[1]}</span>)
                     }
-                    else { return }
+                    else { return ("") }
                 }
                 return (
                     <li onClick={(selectOptionClick)} key={option} className="location-option">

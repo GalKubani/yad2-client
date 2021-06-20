@@ -1,5 +1,4 @@
 import React, { useContext, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import validator from 'validator';
 import { loginUser } from '../../actions/loginActions';
 import { LoginContext } from '../../context/LoginContext';

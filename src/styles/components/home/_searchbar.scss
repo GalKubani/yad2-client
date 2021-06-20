@@ -64,6 +64,9 @@ li,ul{
     background-color: #fff;
     color: #ff7100;
     border-color: #ff7100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .default-button{
     display: flex;
@@ -125,7 +128,7 @@ li,ul{
     width: 140px;
     .arrow{
         right:280px;
-        top:150px;  
+        top:139px;  
     }
 }
 .placeholder{

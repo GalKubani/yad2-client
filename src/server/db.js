@@ -9,6 +9,22 @@ export const getLocationsFromDB = async (searchValue) => {
         console.log(err);
     }
 };
+export const getCityOptionsFromDB = async (searchValue) => {
+    try {
+        const res = await Axios.get(DB_URL + "/search-city?searchValue=" + searchValue)
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
+export const getCityDataFromDB = async (searchValue) => {
+    try {
+        const res = await Axios.get(DB_URL + "/get-city-streets?searchValue=" + searchValue)
+        return res.data;
+    } catch (err) {
+        console.log(err);
+    }
+};
 export const subscribeToSite = async (email, password) => {
     try {
         const res = await Axios.post(DB_URL + `/users/add`, { email, password })
@@ -22,6 +38,18 @@ export const loginToDB = async (email, password) => {
     try {
         const res = await Axios.post(DB_URL + "/users/login", { email, password })
         return res.data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+export const editPersonalData = async (updatedData, token) => {
+    try {
+        const res = await Axios.post(DB_URL + "/users/me", updatedData, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data
     } catch (err) {
         throw new Error(err);
     }

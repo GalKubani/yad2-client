@@ -3,7 +3,7 @@ import SearchBar from './SearchBar'
 
 const Home = () => {
 
-
+    document.getElementsByTagName("title")[0].innerHTML = `נדל"ן למכירה יד2 | אלפי מודעות חדשות בכל יום`
 
     return (
         <div className="home">

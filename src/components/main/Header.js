@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { NavLink, useHistory } from 'react-router-dom'
 import { logoutUser } from '../../actions/loginActions'
 import { LoginContext } from '../../context/LoginContext'
@@ -54,13 +54,16 @@ const Header = () => {
                     <li className="header-list-item">
                         {userData.user ?
                             <div className="user-header-content">
-                                <span className="initials">{userData.user.name}</span>
+                                <span className="initials">{userData.user.name[0] || userData.user.email[0]}</span>
 
                                 <ul className="user-dropdown">
-                                    <li>
-                                        איזור אישי
+                                    <li className="user-option">
+                                        <NavLink className="header__nav-text" to="/personal-area">
+                                            איזור אישי
+                                        </NavLink>
+
                                     </li>
-                                    <li onClick={onClickLogout}>
+                                    <li className="user-option" onClick={onClickLogout}>
                                         התנתקות
                                     </li>
                                 </ul>

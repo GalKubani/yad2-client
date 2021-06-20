@@ -20,11 +20,14 @@
     height: 70px;
     padding: 0 20px;
     background-color: #fff;
+
     border-bottom: 1px solid #eee;
 }
-.header__nav_mobile{
-    
+.header__nav-text{
+    text-decoration: none;
+    color: unset;
 }
+
 .toggle-button {
     display: flex;
     align-items: center;
@@ -161,4 +164,14 @@
     text-align: center;
     line-height: 1.1875rem;
     margin-bottom: 20px;
+}
+.user-option{
+    display: block;
+    margin: 0;
+    line-height: 45px;
+    padding: 0 15px;
+    cursor: pointer;
+}
+.user-option:hover{
+    background-color: #eee
 }

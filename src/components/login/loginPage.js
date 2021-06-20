@@ -15,11 +15,11 @@ const LoginPage = ({ onLoginClick }) => {
 		<div className="modal-container modal-active">
 			<div className="modal-right-display">
 				<div className="welcome-container">
-					<img src="https://y2-address-master-dev.s3-eu-west-1.amazonaws.com/auth/New_logo_negative.svg" />
+					<img alt="לוגו יד2" src="https://y2-address-master-dev.s3-eu-west-1.amazonaws.com/auth/New_logo_negative.svg" />
 					<h1>ברוכים הבאים לאתר יד2</h1>
 					<h4>טוב לראות אותך שוב!</h4>
 				</div>
-				<img className="coach" src="https://y2-address-master-dev.s3-eu-west-1.amazonaws.com/auth/couch_lamp.svg" />
+				<img alt="ספה יד2" className="coach" src="https://y2-address-master-dev.s3-eu-west-1.amazonaws.com/auth/couch_lamp.svg" />
 			</div>
 			<div className="login-modal">
 				{isLoginMode ?

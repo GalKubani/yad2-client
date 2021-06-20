@@ -1,5 +1,4 @@
-import React, { useContext, useDebugValue, useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import React, { useContext, useState } from "react";
 import validator from "validator";
 import { loginUser } from "../../actions/loginActions";
 import { LoginContext } from "../../context/LoginContext";
@@ -32,7 +31,7 @@ const LoginForm = ({ closeModal, setIsLoginMode }) => {
             setIsEmailValid(true)
             e.target.classList.remove("invalid-input")
             e.target.classList.add("valid-input")
-            if (isPasswordInputValid) { setIsFormValid(true) }
+            if (isPasswordInputValid && password !== "") { setIsFormValid(true) }
         }
     }
     const onBluePasswordInput = (e) => {
@@ -52,28 +51,34 @@ const LoginForm = ({ closeModal, setIsLoginMode }) => {
         }
 
     }
-    const onSubmitForm = async (event) => {
+    const onSubmitForm = async (e) => {
+        e.preventDefault();
         try {
             await loginToDB(email, password).then(
                 (userData) => {
                     if (userData) {
                         saveUserOnCookie(userData)
-                        console.log(userData.user)
                         loginDispatch(loginUser(userData.user, userData.token))
-
                         closeModal()
+                        document.location.reload()
                     }
                 })
         } catch (err) {
-            event.preventDefault();
+            const inputParent = e.target.children[0]
             if (err.message === "Error: Request failed with status code 404") {
+                inputParent.children[0].children[1].classList.remove("valid-input")
+                inputParent.children[0].children[1].classList.add("invalid-input")
                 setIsEmailValid(false)
-                setErrorMessage("Email not found")
+                setErrorMessage("אימייל לא נמצא")
             }
             else if (err.message === "Error: Request failed with status code 400") {
+                console.log(inputParent.children[1])
+                inputParent.children[1].children[1].classList.remove("valid-input")
+                inputParent.children[1].children[1].classList.add("invalid-input")
                 setIsPasswordValid(false)
-                setErrorMessage("Invalid password")
+                setPasswordErrorMessage("סיסמה שגויה")
             }
+            setIsFormValid(false)
         }
     }
     const isFormInvalid = () => {

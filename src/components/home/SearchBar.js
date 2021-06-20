@@ -20,6 +20,7 @@ const SearchBar = () => {
     const [streetOptionsShown, setStreetOptionsShown] = useState([])
     const [cityOptionsShown, setCityOptionsShown] = useState([])
     const [neighborhoodOptionsShown, setNeighborhoodOptionsShown] = useState([])
+    const [assetOptionsSelected, setAssetOptionsSelected] = useState("בחרו סוגי נכסים")
 
     const updateRoomRangeArray = (min = roomMinimumRange, max = roomMaximumRange) => {
         let newRoomRange = []
@@ -48,6 +49,12 @@ const SearchBar = () => {
             arrow.classList.add("arrow-click")
             dropdownContent.style.display = "flex"
         }
+    }
+    const onAssetsClick = (e) => {
+        setDidClickOnAssets(!didClickOnAssets)
+        let arrow = e.target.firstElementChild
+        if (arrow.classList.contains("arrow-click")) { arrow.classList.remove("arrow-click") }
+        else { arrow.classList.add("arrow-click") }
     }
     const onAdvancedSearchClick = (e) => {
         e.preventDefault()
@@ -91,6 +98,7 @@ const SearchBar = () => {
     }
     const onSearchbarClick = (e) => {
         e.preventDefault()
+        if (e.target.classList.contains("checkbox-label") || e.target.parentElement.classList.contains("checkbox-label")) { return }
         let dropdown = document.getElementsByClassName("dropdown_content")
         let arrows = document.getElementsByClassName("arrow-click")
         for (let arrow of arrows) { arrow.classList.remove("arrow-click") }
@@ -130,15 +138,41 @@ const SearchBar = () => {
     const closeModal = () => {
         setIsPriceValid(true)
     }
-    const onAssetsClick = () => {
-        setDidClickOnAssets(!didClickOnAssets)
+
+    const onReturnData = (data) => {
+        let counter = 0
+        let dataNames = ["כל סוגי הנכסים", "דירות", "בתים", "גג/פנטהאוז"]
+        let dataSent = []
+        data.map((value, i) => {
+            if (value) {
+                counter++
+                dataSent.push(dataNames[i])
+            }
+            return ("")
+        })
+        if (counter === 0) { setAssetOptionsSelected("בחרו סוגי נכסים") }
+        if (counter > 1) { setAssetOptionsSelected((counter === 4 ? 3 : counter) + " סוגי נכסים") }
+        else { setAssetOptionsSelected(dataSent[0]) }
+
+        // will also nn to place value inside state to use once form is submitted
+    }
+    const onAttemptSearch = async (e) => {
+        e.preventDefault()
+
     }
     return (
         <div onClick={onSearchbarClick}>
-            <form className="search-bar">
+            <form onSubmit={onAttemptSearch} className="search-bar">
                 <div className="search-bar-header">
                     <h3>איזה נכס למכירה תרצו לחפש?</h3>
-                    <button className="searchbar-header-button" type="button">קבלו התראות על חיפוש במייל</button>
+                    <button className="searchbar-header-button" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M19.364 4.636a2 2 0 0 1 0 2.828a7 7 0 0 1 -1.414 7.072l-2.122 2.12a4 4 0 0 0 -.707 3.536l-11.313 -11.312a4 4 0 0 0 3.535 -.707l2.121 -2.123a7 7 0 0 1 7.072 -1.414a2 2 0 0 1 2.828 0z"></path>
+                            <path d="M7.343 12.414l-.707 .707a3 3 0 0 0 4.243 4.243l.707 -.707"></path>
+                        </svg>
+                        קבלו התראות על חיפוש במייל
+                    </button>
                 </div>
 
 
@@ -156,8 +190,8 @@ const SearchBar = () => {
                     </li>
                     <li className="search-column">
                         <label>סוג נכס</label>
-                        <button onClick={onAssetsClick} className="text_input placeholder bigger">בחרו סוג נכסים <div className="arrow">^</div></button>
-                        {didClickOnAssets ? <AssetDropdown /> : ""}
+                        <button onClick={onAssetsClick} className="text_input placeholder bigger">{assetOptionsSelected} <div className="arrow">^</div></button>
+                        {didClickOnAssets ? <AssetDropdown onReturnData={onReturnData} /> : ""}
                     </li>
                     <li className="search-column">
                         <div><label>חדרים</label></div>
@@ -195,7 +229,7 @@ const SearchBar = () => {
                         <button onClick={onAdvancedSearchClick} className="advanced-search-button">חיפוש מתקדם</button>
                         {didClickAdvancedSearch ? <AdvancedSearch /> : ""}
                     </li>
-                    <li className="search-columns">
+                    <li className="search-column">
                         <button type="submit" className="default-button">
                             <svg className="svg-search-icon" role="img" viewBox="0 0 19.9 19.7">
                                 <g fill="none" stroke="white"><path strokeLinecap="square" d="M18.5 18.3l-5.4-5.4" /><circle cx="8" cy="8" r="7" /></g>

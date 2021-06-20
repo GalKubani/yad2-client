@@ -31,8 +31,13 @@
     border: 1px solid #ff7100;
     cursor: pointer;
 }
-.checkmark::after{
-    content: "";
+
+.checkmark-checked{
+    background-color: #ff7100;
+    border: 1px solid #ff7100;
+}
+.checkmark-checked::after{
+    content: "✔";
     font-style: normal;
     font-weight: 400;
     font-feature-settings: normal;
@@ -40,17 +45,16 @@
     text-transform: none;
     line-height: 1;
     color: #fff;
-    display: none;
-    font-size: .55em;
+    height: 1em;
+    width: 1em;
+    min-width: 1em;
+    display: inline;
+    font-size: 12px;
     font-weight: 800;
     position: absolute;
-    top: .4em;
-    left: .2em;
+    top: 2px;
+    left: 0px;
 
-}
-.checkmark:checked{
-    background-color: #ff7100;
-    border: 1px solid #ff7100;
 }
 .checkbox-background{
     height: 100%;
