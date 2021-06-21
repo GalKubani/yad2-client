@@ -6,7 +6,9 @@ const loginReducer = (userData, action) => {
         case "LOGIN_USER":
             return { data: { ...action.userData }, token: action.token };
         case "LOGOUT_USER":
-            return { data: null, token: "" }
+            return { data: null, token: "" };
+        case "UPDATE_USER":
+            return { data: { ...action.userData }, token: action.token };
         default:
             return { ...userData }
     }

@@ -44,7 +44,7 @@ export const loginToDB = async (email, password) => {
 }
 export const editPersonalData = async (updatedData, token) => {
     try {
-        const res = await Axios.post(DB_URL + "/users/me", updatedData, {
+        const res = await Axios.patch(DB_URL + "/users/me", updatedData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }

@@ -9,10 +9,10 @@ const DropdownContent = ({ name, selectOptionClick, dropdownData }) => {
     return (
         <div className={"dropdown_content " + name}>
             <ul className="location-list">
-                {dropdownData.map((city) => {
+                {dropdownData.map((data) => {
                     return (
-                        <li onClick={onItemClick} className="location-option" key={city}>
-                            {city}
+                        <li onClick={onItemClick} className="location-option" key={data}>
+                            {data}
                         </li>
                     )
                 })}

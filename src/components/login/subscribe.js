@@ -90,6 +90,7 @@ const SubscribeForm = ({ closeModal, setIsLoginMode }) => {
                     loginDispatch(loginUser(userData));
                     saveUserOnCookie(userData)
                     closeModal()
+                    document.location.reload()
                 },
                 (err) => {
                     if (err.message === "EMAIL_EXISTS") {

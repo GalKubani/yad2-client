@@ -3,6 +3,11 @@ export const loginUser = (userData, token) => ({
     userData,
     token
 })
+export const updateUser = (userData, token) => ({
+    type: "UPDATE_USER",
+    userData,
+    token
+})
 export const logoutUser = () => ({
     type: "LOGOUT_USER"
 })
