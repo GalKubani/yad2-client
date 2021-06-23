@@ -75,7 +75,9 @@ const Header = () => {
 
                     </li>
                     <li>
-                        <button className="new-ad-button">+ פרסום מודעה חדשה </button>
+                        {userData.user ? <NavLink to="/new-advert" className="header__nav-text">
+                            <button className="new-ad-button">+ פרסום מודעה חדשה </button>
+                        </NavLink> : <button onClick={onLoginClick} className="new-ad-button">+ פרסום מודעה חדשה </button>}
                     </li>
                 </ul>
             </div> :

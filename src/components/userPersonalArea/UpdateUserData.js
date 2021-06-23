@@ -1,24 +1,30 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { updateUser } from '../../actions/loginActions'
 import { LoginContext } from '../../context/LoginContext'
 import { saveUserOnCookie } from '../../cookies/cookies'
 import { getCityDataFromDB, getCityOptionsFromDB, editPersonalData } from '../../server/db'
 import DropdownContent from '../main/DropdownContent'
 import PersonalAreaNavbar from './PersonalAreaNavbar'
+import validator from "validator";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const UpdateUserData = () => {
     document.getElementsByTagName("title")[0].innerHTML = "לקוח - פרטי הלקוח"
     const { userData, loginDispatch } = useContext(LoginContext)
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false)
     const [isDropdownVisible, setIsDropdownVisible] = useState(false)
     const [isNeighborhoodDropdownVisible, setIsNeighborhoodDropdownVisible] = useState(false)
     const [isStreetDropdownVisible, setIsStreetDropdownVisible] = useState(false)
     const [selectedCityData, setSelectedCityData] = useState({})
+    const [dateValue, onChange] = useState(userData.dateOfBirth?.toLocaleDateString("he-IL"));
     const [selectedCity, setSelectedCity] = useState("")
     const [selectedNeighborhood, setSelectedNeighborhood] = useState("")
     const [selectedStreet, setSelectedStreet] = useState("")
     const [cityDropdownData, setCityDropdownData] = useState([])
     const [streetDropdownData, setStreetDropdownData] = useState([])
     const [neighborhoodDropdownData, setNeighborhoodDropdownData] = useState([])
+
     let currentUser = userData.user
     const onLocationInput = async (e) => {
         e.preventDefault()
@@ -94,9 +100,8 @@ const UpdateUserData = () => {
             dateOfBirth: allInputs[8].value || userData.user.dateOfBirth,
             email: allInputs[9].value || userData.user.email,
         }
-        if (allInputs[10].value) {
-            formBody.password = allInputs[10].value
-        }
+        if (!validator.isEmail(allInputs[9].value)) { formBody.email = userData.user.email }
+        if (allInputs[10].value) { formBody.password = allInputs[10].value }
         try {
             await editPersonalData(formBody, userData.token).then((res) => {
                 saveUserOnCookie({ user: res, token: userData.token })
@@ -111,6 +116,12 @@ const UpdateUserData = () => {
     const isValueInvalid = (value) => {
         return !value
     }
+    const updateDate = (e) => {
+        e.target.value = dateValue?.toLocaleDateString("he-IL")
+        setIsCalendarVisible(false)
+    }
+    useEffect(() => { setIsCalendarVisible(false) }
+        , [dateValue])
     return (
         <div className="personal-area-container">
             <PersonalAreaNavbar />
@@ -130,15 +141,15 @@ const UpdateUserData = () => {
                                 <li className="column-list-item">
                                     <label>ישוב:</label>
                                     <div>
-                                        <input defaultValue={currentUser.city} name="city" type="text" onChange={onLocationInput} value={selectedCity} />
-                                        {isDropdownVisible && <DropdownContent name="city" selectOptionClick={selectCityOptionClick} dropdownData={cityDropdownData} />}
+                                        <input name="city" type="text" onChange={onLocationInput} value={selectedCity || currentUser.city} />
+                                        {isDropdownVisible && cityDropdownData.length > 0 && <DropdownContent name="city" selectOptionClick={selectCityOptionClick} dropdownData={cityDropdownData} />}
 
                                     </div>
                                 </li>
                                 <li className="column-list-item">
                                     <label>שכונה:</label>
                                     <div>
-                                        <input defaultValue={currentUser.neighborhood} disabled={isValueInvalid(isNeighborhoodDropdownVisible || neighborhoodDropdownData.length > 0)} name="neighborhood" type="text" onChange={onLocationInput} value={selectedNeighborhood} />
+                                        <input disabled={isValueInvalid(isNeighborhoodDropdownVisible || neighborhoodDropdownData.length > 0)} name="neighborhood" type="text" onChange={onLocationInput} value={selectedNeighborhood || currentUser.neighborhood} />
                                         {isNeighborhoodDropdownVisible && neighborhoodDropdownData.length > 0 && <DropdownContent name="neighborhood" selectOptionClick={selectNeighborhoodOptionClick} dropdownData={neighborhoodDropdownData} />}
                                     </div>
 
@@ -146,7 +157,7 @@ const UpdateUserData = () => {
                                 <li className="column-list-item">
                                     <label>רחוב:</label>
                                     <div>
-                                        <input defaultValue={currentUser.street} disabled={isValueInvalid(isStreetDropdownVisible || streetDropdownData.length > 0)} name="street" type="text" onChange={onLocationInput} value={selectedStreet} />
+                                        <input disabled={isValueInvalid(isStreetDropdownVisible || streetDropdownData.length > 0)} name="street" type="text" onChange={onLocationInput} value={selectedStreet || currentUser.street} />
                                         {isStreetDropdownVisible && streetDropdownData.length > 0 && <DropdownContent name="street" selectOptionClick={selectStreetOptionClick} dropdownData={streetDropdownData} />}
                                     </div>
                                 </li>
@@ -156,13 +167,14 @@ const UpdateUserData = () => {
                         <div className="column-content">
                             <ul className="column-list">
                                 <li className="column-list-item">
-                                    <label>*טלפון ראשי:</label><input defaultValue={currentUser.mainPhone} type="text" />
+                                    <label>*טלפון ראשי:</label><input defaultValue={currentUser.mainPhone} type="ph" />
                                 </li>
                                 <li className="column-list-item">
                                     <label>טלפון 2:</label><input defaultValue={currentUser.secondaryPhone} type="text" />
                                 </li>
                                 <li className="column-list-item">
-                                    <label>תאריך לידה:</label><input defaultValue={currentUser.dateOfBirth} type="text" />
+                                    <label>תאריך לידה:</label><input onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} value={dateValue?.toLocaleDateString("he-IL") || ""} onChange={updateDate} placeholder="DD/MM/YYYY" type="text" />
+                                    {isCalendarVisible && <Calendar className="date-of-birth-cal" value={new Date(2000, 0, 0)} onChange={onChange} maxDate={new Date(2010, 0, 0)} locale="he-IL" calendarType="Hebrew" />}
                                 </li>
                                 <li className="column-list-item">
                                     <label>*דוא"ל:</label><input defaultValue={currentUser.email} type="text" />
@@ -171,7 +183,7 @@ const UpdateUserData = () => {
                                     <label>שם משתמש:</label> {userData.user.email}
                                 </li>
                                 <li className="column-list-item">
-                                    <label>לעדכון סיסמה:</label><input type="text" />
+                                    <label>לעדכון סיסמה:</label><input type="password" />
                                 </li>
                             </ul>
                         </div>
