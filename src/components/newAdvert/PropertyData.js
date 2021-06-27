@@ -10,13 +10,26 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
     const [textAreaCounter, setTextAreaCounter] = useState(0)
     const onFinishArea = (e) => {
         e.preventDefault()
-        // will nn to validate all * fields are filled
-        // will then nn to send data up, close this box and open the next
-        onClickForward()
+        let roomData = e.target.getElementsByTagName("select")[0]
+        if (roomData.value * 1 === 0) { return }
+        let checkboxData = e.target.getElementsByClassName("property-checkbox")
+        let allRadios = e.target.getElementsByClassName("radio_input")
+        let textAreaValue = e.target.getElementsByTagName("textarea")[0].value
+        let checkedRadiosValues = []
+        let checkboxValues = []
+        for (let option of allRadios) { if (option.checked) { checkedRadiosValues.push(option.value) } }
+        for (let option of checkboxData) { if (option.checked) { checkboxValues.push(option.value) } }
+        let propertyData = {
+            assetTotalRooms: roomData.value * 1,
+            assetTotalParking: checkedRadiosValues[0] * 1,
+            assetTotalPorchs: checkedRadiosValues[1] * 1,
+            assetDetails: textAreaValue,
+            assetCharecteristics: checkboxValues
+        }
+        onClickForward(propertyData)
 
     }
     const onCheckBox = (e) => {
-        e.preventDefault()
         let currentActive = e.target.parentElement.parentElement.getElementsByClassName("radio-active")[0]
         currentActive.classList.remove("radio-active")
         e.target.nextElementSibling.classList.add("radio-active");
@@ -27,6 +40,10 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
             return
         }
         setTextAreaCounter(e.target.value.length)
+    }
+    const onCheckboxClick = (e) => {
+        if (e.target.checked) { e.target.parentElement.classList.add("box-active") }
+        else { e.target.parentElement.classList.remove("box-active") }
     }
     return (
         <div className={currentClassName}>
@@ -53,6 +70,16 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
                 </div>
                 <div>
                     <label className="larger-text">מאפייני הנכס</label>
+                    <div className="checkbox-container">
+                        {["מיזוג", "דוד שמש", "ריהוט", "מעלית", "ממד", "משופצת"].map((value) => {
+                            return (
+                                <div key={value} className="checkbox-wrapper">
+                                    <input value={value} onClick={onCheckboxClick} type="checkbox" className="property-checkbox" />
+                                    <div className="checkbox-label-wrap">{value}</div>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
                 <div className="narrower">
                     <div><label className="larger-text">מה חשוב לך שידעו על הנכס?</label></div>

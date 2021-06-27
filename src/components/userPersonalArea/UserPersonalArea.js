@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../context/LoginContext'
+import { findUserAdverts } from '../../server/db'
 import PersonalAreaNavbar from './PersonalAreaNavbar'
 
 
@@ -7,6 +8,13 @@ import PersonalAreaNavbar from './PersonalAreaNavbar'
 const UserPersonalArea = () => {
     document.getElementsByTagName("title")[0].innerHTML = "אזור אישי"
     const { userData } = useContext(LoginContext)
+    const [userAdverts, setUserAdverts] = useState([])
+    // will map user adverts later on
+    useEffect(async () => {
+        try {
+            await findUserAdverts(userData.token).then((res) => { setUserAdverts(res) })
+        } catch (err) { console.log(err) }
+    }, [])
     return (
         <div className="personal-area-container">
             <PersonalAreaNavbar />

@@ -1,0 +1,123 @@
+.main-media-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+.main-media-container::after{
+    content: "";
+    display: block;
+    height: 1px;
+    width: 100%;
+    background: rgb(157, 157, 157);
+    margin: 40px 0px 20px;
+}
+.media-input-wrapper{
+    margin:0 auto;
+    margin-right: 20px;
+    width: 234px;
+    height: 200px;
+    border-radius: 5px;
+    background-color: rgb(255, 255, 255);
+    border: 2px dashed rgb(157, 157, 157);
+}
+.media-input{
+
+    width: 100%;
+    opacity: 0;
+    height: 100%;
+    cursor: pointer;
+}
+.main-pic-media{
+    background: #eee;
+    border-radius: 6px;
+    border-bottom: none;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 0 10px 10px 10px;
+    div{
+        margin:0;
+    }
+}
+.main-input-wrapper{
+    width: 100%;
+    height: 92%;
+    margin:0 auto;
+    position: relative;
+    font-family: Rubik;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    color: #9d9d9d;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #fff;
+}
+.media-plus-wrap{
+    left: 0;
+    bottom:67%;
+    cursor: pointer;
+    text-align: center;
+    position: relative;
+    font-size: 2.6rem;
+    color: #9d9d9d;
+    p{
+        font-size: 1rem;
+        margin: 0 auto;
+    }
+}
+.media-container{
+    width: 100%;
+    height: 100%;
+}
+.main-pic-wrapper{
+    position: absolute;
+    height: 150px;
+    width: 218px;
+    img{
+        width: 218px;
+        height: 170px;
+    }
+}
+.reg-pic-wrapper{
+    position: absolute;
+    height: 200px;
+    width: 232px;
+    img{
+        width: 232px;
+        height: 200px;
+    }
+}
+.media-data-container{
+    @extend .media-input-wrapper;
+    @extend .main-pic-media;
+    background: unset;
+    width: unset;
+    height: unset;
+    padding: unset  ;
+    border: 0px;
+}
+.remove-pic-button{
+    font-size: 17px;
+    right: 6px;
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+    z-index: 5;
+    padding: 5px 2px 5px 3px;
+    background-color: #e8e9e8;
+    color: #363636;
+    border-radius: 100%;
+    opacity: .75;
+    border: inherit;
+    position: absolute;
+    top: 5px;
+}
+.overpic{
+    display: none;
+}

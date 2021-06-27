@@ -1,0 +1,79 @@
+.data-container-whitebox{
+    max-width: 880px;
+    width: 100%;
+    margin-bottom: 15px;
+    position: relative;
+    padding-top: 30px;
+    padding-bottom: 40px;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px 0 rgba(12 ,0 ,51 , 0.1);
+    text-align: right;
+    div{
+        margin-bottom: 20px;
+
+    }
+    label{
+        margin-left: 90%;
+
+    }
+    select{
+        width: 33%;
+        cursor: pointer;
+        height: 40px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+        font-size: 14px;
+        text-indent: 8px;
+        font-family: Rubik,sans-serif;
+    }
+    form{
+        font-size: 14px;
+        padding: 1% 5%;
+        .dropdown-content{
+            max-width: 100%;
+            right:unset;
+            min-width: unset;
+        }
+        .location{
+            transform: translateX(0);
+            right:unset;
+            max-width: 260px;
+            min-width: unset;
+        }
+        .location-list{
+            max-width: 100%;
+        }
+    }
+    h4{
+        color: #000;
+        font-size: 1.1em;
+        font-weight: inherit;
+        margin-bottom: 20px;
+        margin-top: 20px;
+        line-height: 22px;
+    }
+    h2{
+        padding: 0px;
+        margin: 0;
+        color: #000;
+        font-size: 24px;
+        padding-right: 5.5%;
+        margin-bottom: 0;
+        font-weight: 300;
+    }
+    textarea{
+        border-radius: 0;
+        padding: 16px 10px 20px 70px;
+        overflow: auto;
+        font-family: Rubik,sans-serif;
+        font-size: 16px;
+        height: 118px;
+        width: 100%;
+        resize: none;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+}

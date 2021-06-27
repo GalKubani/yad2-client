@@ -38,7 +38,7 @@ const AddressData = ({ onClickForward, currentClassName }) => {
         e.target.parentElement.parentElement.style.display = "none"
     }
     const onStreetBlur = () => {
-        setNeighborhoodShown(neighborhoodOptionsShown[0].split("//")[0].split("שכ")[1])
+        setNeighborhoodShown(neighborhoodOptionsShown[0]?.split("//")[0].split("שכ")[1])
     }
     const onCityBlur = async (e) => {
         try {
@@ -103,6 +103,9 @@ const AddressData = ({ onClickForward, currentClassName }) => {
                     <select>
                         <option value="">משופץ? חדש מקבלן? </option>
                         <option value="חדש מקבלן (לא גרו בו בכלל)">חדש מקבלן (לא גרו בו בכלל)</option>
+                        <option value=" חדש (נכס בן עד 5 שנים)"> חדש (נכס בן עד 5 שנים) </option>
+                        <option value=" משופץ (שופץ ב5 השנים האחרונות)"> משופץ (שופץ ב5 השנים האחרונות) </option>
+                        <option value=" במצב שמור (במצב טוב, לא שופץ)"> במצב שמור (במצב טוב, לא שופץ) </option>
                     </select>
                 </div>
                 <div>

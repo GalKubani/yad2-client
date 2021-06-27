@@ -33,7 +33,6 @@ export const subscribeToSite = async (email, password) => {
         throw new Error(err);
     }
 }
-
 export const loginToDB = async (email, password) => {
     try {
         const res = await Axios.post(DB_URL + "/users/login", { email, password })
@@ -50,6 +49,57 @@ export const editPersonalData = async (updatedData, token) => {
             }
         })
         return res.data
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+export const addNewAdvert = async (formData, token) => {
+    try {
+        const res = await Axios.post(DB_URL + "/adverts/new", formData, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+export const addAdvertMedia = async (mediaData, token, advertId) => {
+    try {
+        if (mediaData.assetPictures) {
+            let parsedData = new FormData
+            for (let file of mediaData.assetPictures) {
+                if (file) { parsedData.append("assetPictures", file) }
+            }
+            await Axios.post(DB_URL + "/adverts/add-pictures?id=" + advertId, parsedData, {
+                headers: {
+                    "Content-Type": 'multipart/form-data',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        }
+        if (mediaData.assetVideo) {
+            await Axios.post(DB_URL + "/adverts/add-video?id=" + advertId, mediaData.assetVideo, {
+                headers: {
+                    "Content-Type": 'multipart/form-data',
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        }
+        return
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+export const findUserAdverts = async (token) => {
+    try {
+        const res = await Axios.get(DB_URL + "/adverts/get-user", {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data;
     } catch (err) {
         throw new Error(err);
     }
