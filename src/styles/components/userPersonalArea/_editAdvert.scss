@@ -1,0 +1,48 @@
+.my-advert-image-container{
+    .media-input-wrapper{
+        width: 117px;
+        height: 122px;
+    }
+    .reg-pic-wrapper{
+        width: 122px;
+        height: 122px;
+        top: 0;
+        right: 0;
+    }
+    .remove-pic-button{
+        right:18px;
+    }
+}
+.hidden{
+    display: none;
+}
+.shown{
+    display: unset;
+}
+.advert-field{
+    position: relative;
+    align-items: center;
+    textarea{
+        border-radius: 6px;
+        height: 150px;
+        width: 100%;
+        padding: 16px 10px 20px 20px;
+    }
+    .property-width{
+        position: absolute;
+        left: 20px;
+        height: 30px;
+        width: 120px!important;
+    }
+    select{
+        width: 60%;
+        border-radius: 6px;
+    }
+}
+.radio-field{
+    margin-top: 15px;
+    margin-bottom: 25px;
+}
+.num-input{
+    width: 100px!important;
+}

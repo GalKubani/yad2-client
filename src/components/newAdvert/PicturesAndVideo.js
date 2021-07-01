@@ -1,28 +1,26 @@
 import React, { useState } from 'react'
+import PictureInput from './PictureInput'
 
 const PicturesAndVideo = ({ onClickForward, currentClassName, onClickBack }) => {
-    // will nn to add 10 empty slots in asset pics, to be able to track which pictures are added
-    const [assetPictures, setAssetPictures] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
+    const [assetPicturesFile, setAssetPicturesFile] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [assetPictureData, setAssetPictureData] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [assetVideo, setAssetVideo] = useState(undefined)
 
     const onFinishArea = (e) => {
         e.preventDefault()
-
         let mediaData = {
             assetPictures: assetPictureData,
             assetVideo
         }
-
         onClickForward(mediaData)
     }
     const onAddingPicture = (e) => {
         let picIndex = e.target.name
         const picture = e.target.files[0]
         if (!picture) { return }
-        let newPicSrcArr = [...assetPictures]
+        let newPicSrcArr = [...assetPicturesFile]
         newPicSrcArr[picIndex] = URL.createObjectURL(picture)
-        setAssetPictures(newPicSrcArr)
+        setAssetPicturesFile(newPicSrcArr)
         let updatedPicArray = [...assetPictureData]
         updatedPicArray[picIndex] = picture
         setAssetPictureData([...updatedPicArray])
@@ -42,14 +40,17 @@ const PicturesAndVideo = ({ onClickForward, currentClassName, onClickBack }) => 
     const onTrashClick = (e) => {
         e.preventDefault();
         let picIndex = e.target.name
-        let updatedPictures = [...assetPictures]
+        let updatedPictures = [...assetPicturesFile]
         updatedPictures[picIndex] = undefined
-        setAssetPictures(updatedPictures)
+        setAssetPicturesFile(updatedPictures)
         let updatedPicArray = [...assetPictureData]
         updatedPicArray[picIndex] = undefined
         setAssetPictureData([...updatedPicArray])
     }
-
+    const dispatchUpdate = (data, option) => {
+        if (option === "pictures") { setAssetPicturesFile(data) }
+        else { setAssetPictureData([...data]) }
+    }
     const onTrashVideoClick = (e) => {
         e.preventDefault()
         setAssetVideo(undefined)
@@ -77,9 +78,9 @@ const PicturesAndVideo = ({ onClickForward, currentClassName, onClickBack }) => 
                                 <input name={0} accept="image/*" className="media-input" type="file" onChange={onAddingPicture}></input>
                                 <div onClick={onPlusClick} className="media-plus-wrap">  +   <p>העלאת תמונות</p></div>
                             </div>
-                            <div className="main-pic-wrapper">
-                                {assetPictures[0] && <button name={0} onClick={onTrashClick} className="remove-pic-button">🗑</button>}
-                                <img alt="" onMouseOver={onMouseOverPic} onMouseLeave={onMouseLeavePic} onClick={onMouseClickPic} name={0} src={assetPictures[0]}></img>
+                            <div className={"main-pic-wrapper" + (assetPicturesFile[0] ? " shown" : " hidden")}>
+                                {assetPicturesFile[0] && <button name={0} onClick={onTrashClick} className="remove-pic-button">🗑</button>}
+                                <img alt="" onMouseOver={onMouseOverPic} onMouseLeave={onMouseLeavePic} onClick={onMouseClickPic} name={0} src={assetPicturesFile[0]}></img>
                             </div>
                         </div>
                     </div>
@@ -88,16 +89,8 @@ const PicturesAndVideo = ({ onClickForward, currentClassName, onClickBack }) => 
                 <div className="main-media-container">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value) => {
                         return (
-                            <div key={value} className="media-data-container">
-                                <div className="media-input-wrapper">
-                                    <input accept="image/*" name={value} className="media-input" type="file" onChange={onAddingPicture}></input>
-                                    <div onClick={onPlusClick} className="media-plus-wrap">  +   <p>העלאת תמונות</p></div>
-                                </div>
-                                <div className="reg-pic-wrapper">
-                                    {assetPictures[value] && <button name={value} onClick={onTrashClick} className="remove-pic-button">🗑</button>}
-                                    <img alt="" onMouseOver={onMouseOverPic} onMouseLeave={onMouseLeavePic} onClick={onMouseClickPic} name={value} src={assetPictures[value]}></img>
-                                </div>
-                            </div>
+                            <PictureInput className={"media-data-container"} value={value} key={value} assetPicturesFile={assetPicturesFile} dispatchUpdate={dispatchUpdate}
+                                assetPictureData={assetPictureData} />
                         )
                     })}
                 </div>

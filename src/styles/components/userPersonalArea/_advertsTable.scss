@@ -1,0 +1,182 @@
+.adverts-table{
+    width: 1000px;
+    background-color: #EEEEF3;
+    margin: 0 auto 40px auto;
+    padding-bottom: 20px;
+    table{
+        width: 100%;
+        margin: 0 auto;
+        padding: 0;
+
+    }
+}
+.table-headers{
+    text-align: center;
+    color: #FFFFff;
+    background-color: #8f8f8f;
+    height: 34px;
+}
+.address-table{
+    width: 30%;
+}
+.table-advert{
+    background: #e0e0e4;
+    text-align: center;
+    height: 34px;
+    cursor: pointer;
+}
+.table-advert:hover{
+    background: rgb(75, 253, 253);
+}
+.my-advert-container{
+    display:flex;
+    padding: 5px;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.my-advert-content{
+    border: 1px solid #DCDCDC;
+    padding: 5px;
+    background: #f9f9f9;
+    border-radius: 5px;
+    margin: 0;
+    margin-bottom: 20px;
+    min-height: 304px;
+    width: 75%;
+}
+.my-advert-management{
+    @extend .my-advert-content;
+    width: 20%;
+    min-height: unset;
+    height: 240px;
+}
+.my-advert-pictures{
+    @extend .my-advert-content;
+    width: 97%;
+    .my-content-title{
+        margin-bottom: 30px;
+    }
+}
+.my-content-title{
+    background: #FE7011;
+    width: 100%;
+    height: 32px;
+    padding-right: 6px;
+    border-radius: 5px 5px 0 0;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 200%;
+}
+.my-advert-image-container{
+    position: relative;
+    margin-bottom: 5px;
+    float: right;
+    width: 17%;
+    margin-left: 2.75%;
+
+    img{
+        width: 122px;
+        height: 122px;
+        box-shadow: 0px 10px 12px -6px #808080;
+        background: #ffffff;
+        transition: transform 200ms ease-in;
+        margin-bottom: 10px;
+        margin-right: 15px;
+    }
+}
+.advert-content-column{
+    width: 32%;
+    border-left: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    margin-top: 8px;
+    padding-right: 3px;
+    margin-right: 8px;
+}
+.advert-field{
+    display: flex;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    span{
+        font-weight: 700;
+    }
+    div{
+        max-width: 100%;
+        overflow-wrap: break-word;
+    }
+    img{
+        width: 30px;
+        height: 30px;
+        float: right;
+        border: 0px;
+    }
+    .orange{
+        color: #fe933f;
+        line-height: 1.9;
+    }
+    input{
+        width: 60px;
+    }
+}
+.unchecked{
+    text-decoration: line-through;
+    opacity: 0.5;
+}
+.content-column-wrapper{
+    display: flex;
+    flex-wrap: wrap;
+}
+.charecteristics-div{
+    height: 30px;
+    width: 48%;
+}
+.edit-button{
+    background: #00b63c;
+    border-radius: 6px;
+    color: #ffffff;
+    font-weight: bold;
+    height: 30px;
+    padding-right: 6px;
+    font-size: 16px;
+    line-height: 30px;
+    margin-right: 6px;
+    cursor: pointer;
+    display: block;
+    width: 75%;
+    border: none;
+    margin-top: 10px;
+    span::before{
+        content: "✎";
+    }
+}
+.edit-status-container{
+    margin-top: 10px;
+    select{
+        border-radius: 6px;
+        font-size: 1.1em;
+        height: 25px;
+        margin-right: 6px;
+    }
+}
+.edit-status-button{
+    padding: 0 5px;
+    height: 23px;
+    margin-right: 6px;
+    line-height: 23px;
+    border-radius: 6px;
+    background: white;
+    cursor: pointer;
+    color: #ff6600;
+    border: 1px solid #ff6600;
+}
+.edit-status-button:hover{
+    color: white;
+    background: #ff6600;
+}
+.delete-advert-button{
+    margin-top: 20px;
+    @extend .edit-status-button;
+    width:80%;
+}

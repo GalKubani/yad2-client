@@ -39,7 +39,7 @@ const PaymentAndDates = ({ onClickForward, currentClassName, onClickBack }) => {
                 </div>
                 <div className="calendar-wrapper" >
                     <label>תאריך כניסה*</label>
-                    <input onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} onChange={() => { }} type="text" autoComplete="off" value={dateValue.toLocaleDateString("he-IL")} className="text_input wider" />
+                    <input onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} onChange={() => { }} type="text" autoComplete="off" value={dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })} className="text_input wider" />
                     {isCalendarVisible && <Calendar value={new Date()} onChange={onChange} minDate={new Date()} locale="he-IL" calendarType="Hebrew" />}
 
                 </div>

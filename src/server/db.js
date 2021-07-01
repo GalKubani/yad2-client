@@ -68,7 +68,7 @@ export const addNewAdvert = async (formData, token) => {
 export const addAdvertMedia = async (mediaData, token, advertId) => {
     try {
         if (mediaData.assetPictures) {
-            let parsedData = new FormData
+            let parsedData = new FormData()
             for (let file of mediaData.assetPictures) {
                 if (file) { parsedData.append("assetPictures", file) }
             }
@@ -102,5 +102,29 @@ export const findUserAdverts = async (token) => {
         return res.data;
     } catch (err) {
         throw new Error(err);
+    }
+}
+export const editAdvert = async (advertData, token, advertId) => {
+    try {
+        const res = await Axios.patch(DB_URL + "/adverts/edit?id=" + advertId, advertData, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+export const deleteAdvert = async (token, advertId) => {
+    try {
+        const res = await Axios.delete(DB_URL + "/adverts/delete?id=" + advertId, {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data
+    } catch (err) {
+        throw new Error(err)
     }
 }
