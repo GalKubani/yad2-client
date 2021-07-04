@@ -41,6 +41,14 @@ export const loginToDB = async (email, password) => {
         throw new Error(err);
     }
 }
+export const getAllAdverts = async () => {
+    try {
+        const res = await Axios.get(DB_URL + "/adverts/get-all")
+        return res.data
+    } catch (err) {
+        throw new Error(err)
+    }
+}
 export const editPersonalData = async (updatedData, token) => {
     try {
         const res = await Axios.patch(DB_URL + "/users/me", updatedData, {
@@ -67,6 +75,13 @@ export const addNewAdvert = async (formData, token) => {
 }
 export const addAdvertMedia = async (mediaData, token, advertId) => {
     try {
+        if (mediaData.assetCurrentPicturesIndex) {
+            await Axios.post(DB_URL + "/adverts/update-pictures?id=" + advertId, mediaData.assetCurrentPicturesIndex, {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+        }
         if (mediaData.assetPictures) {
             let parsedData = new FormData()
             for (let file of mediaData.assetPictures) {
@@ -106,6 +121,7 @@ export const findUserAdverts = async (token) => {
 }
 export const editAdvert = async (advertData, token, advertId) => {
     try {
+
         const res = await Axios.patch(DB_URL + "/adverts/edit?id=" + advertId, advertData, {
             headers: {
                 'Authorization': 'Bearer ' + token

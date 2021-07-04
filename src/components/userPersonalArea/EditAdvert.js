@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../context/LoginContext'
-import { editAdvert } from '../../server/db'
+import { editAdvert, addAdvertMedia } from '../../server/db'
+import Calendar from 'react-calendar';
 import { calculateDate } from '../../utils/calculateDate'
 import PictureInput from '../newAdvert/PictureInput'
 import RadioOptions from '../newAdvert/RadioOptions'
@@ -9,27 +10,10 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
     const [assetPicturesFile, setAssetPicturesFile] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [assetPictureData, setAssetPictureData] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [isImmidiateEntrence, setIsImmidiateEntrence] = useState(false)
+    const [dateValue, onChange] = useState(calculateDate(currentAdvert.dateOfEntry, true));
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false)
 
-
-
-
-
-
-
-    // when edit is complete
-    // will nn to send only the new files to be added on advert via add pic route
-    // const onChangeActiveStatus = async (e) => {
-    //     e.preventDefault()
-    //     if (e.target.previousElementSibling.value === currentAdvert.isAdvertActive + "") { return }
-    //     else {
-    //         try {
-    //             await editAdvert({ isAdvertActive: e.target.previousElementSibling.value }, userData.token, currentAdvert._id).then((res) => {
-    //                 document.location.reload()
-    //             })
-    //         } catch (err) { console.log(err) }
-    //     }
-    // }
-    const onClickReturn = (e) => {
+    const onClickReturn = () => {
         setIsAdvertClicked(true)
         setIsAdvertEditClicked(false)
     }
@@ -44,12 +28,57 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
             return
         }
     }
-    const onFormSubmit = (e) => {
+    const onFormSubmit = async (e) => {
         e.preventDefault()
+        let allInputs = e.target.getElementsByTagName("input")
+        let allCheckboxes = e.target.getElementsByClassName("checkbox-wrapper box-active")
+        let assetCondition = e.target.getElementsByTagName("select")[0]
+        let textArea = e.target.getElementsByTagName("textarea")[0]
+        let allRadioOptions = e.target.getElementsByClassName("radio_input")
+        let assetCharecteristics = [], assetPictures = [], assetCurrentPicturesIndex = []
+        let assetTotalParking, assetTotalPorchs
+        for (let i = 0; i < 10; i++) {
+            if (!assetPicturesFile[i] && !assetPictureData[i]) { continue }
+            else if (assetPicturesFile[i].includes("data:image/jpeg;base64,") && !assetPictureData[i]) {
+                assetCurrentPicturesIndex.push(i)
+            }
+            else { assetPictures.push(assetPictureData[i]) }
+        }
+        let mediaData = {
+            assetPictures,
+            assetCurrentPicturesIndex
+        }
+        for (let option of allRadioOptions) {
+            if (option.checked) {
+                if (option.name === "porch") { assetTotalPorchs = option.value }
+                else { assetTotalParking = option.value }
+            }
+        }
+        for (let box of allCheckboxes) { assetCharecteristics.push(box.children[0].value) }
+        if (!allInputs[17].value || !allInputs[18].value) { return }
+        let dateOfEntry = dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })
+        let advertData = {
+            assetTotalParking, assetTotalPorchs,
+            assetDetails: textArea.value, assetCharecteristics,
+            assetCondition: assetCondition.value || currentAdvert.assetCondition, assetBuiltSize: allInputs[4].value,
+            assetPrice: allInputs[15].value * 1, dateOfEntry,
+            contacts: { contactName: allInputs[17].value, contactNumber: allInputs[18].value },
+        }
+        try {
+            await editAdvert(advertData, userData.token, currentAdvert._id).then(async () => {
+                await addAdvertMedia(mediaData, userData.token, currentAdvert._id).then(() => {
+                    document.location.reload()
+                })
+            })
+        } catch (err) { console.log(err) }
     }
     const dispatchUpdate = (data, option) => {
         if (option === "pictures") { setAssetPicturesFile(data) }
         else { setAssetPictureData([...data]) }
+    }
+    const onCheckboxClick = (e) => {
+        if (e.target.checked) { e.target.parentElement.classList.add("box-active") }
+        else { e.target.parentElement.classList.remove("box-active") }
     }
     useEffect(() => {
         let assetPictures = [...currentAdvert.assetPictures];
@@ -57,6 +86,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         let srcData = []
         const initialiseComponent = () => {
             for (let picture of assetPictures) {
+                if (!picture) { continue }
                 let binary = ''
                 let bytes = [].slice.call(new Uint8Array(picture.data));
                 bytes.forEach((b) => binary += String.fromCharCode(b));
@@ -70,6 +100,10 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         }
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert])
+    useEffect(() => {
+        setIsImmidiateEntrence(dateValue < new Date())
+        setIsCalendarVisible(false)
+    }, [dateValue])
     return (
         <tr>
             <td colSpan="10">
@@ -102,10 +136,12 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                             </div>
                             <div className="advert-content-column">
                                 <div className="content-column-wrapper">
-                                    {/* nn to add checkbox here */}
                                     {["מיזוג", "דוד שמש", "ריהוט", "מעלית", "ממד", "משופצת"].map((value) => {
                                         return (
-                                            <div className={"charecteristics-div " + (currentAdvert.assetCharecteristics.includes(value) ? " " : "unchecked")} key={value}>{value}</div>
+                                            <div key={value} className="checkbox-wrapper">
+                                                <input onClick={onCheckboxClick} defaultChecked={currentAdvert.assetCharecteristics.includes(value)} value={value} type="checkbox" className="property-checkbox" />
+                                                <div className="checkbox-label-wrap">{value}</div>
+                                            </div>
                                         )
                                     })}
                                     <div className="advert-field"> <span>מחיר</span><div>{": "}<input defaultValue={currentAdvert.assetPrice}></input></div></div>
@@ -113,8 +149,11 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                                 </div>
                             </div>
                             <div className="advert-content-column">
-                                <div className="advert-field"> <span>תאריך כניסה</span><div>{": "}{currentAdvert.dateOfEntry}</div></div>
-                                {/* nn to add calendar here */}
+                                <div className="calendar-wrapper" >
+                                    <label>תאריך כניסה*</label>
+                                    <input onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} onChange={() => { }} type="text" autoComplete="off" value={dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })} className="text_input wider" />
+                                    {isCalendarVisible && <Calendar value={new Date()} onChange={onChange} minDate={new Date()} locale="he-IL" calendarType="Hebrew" />}
+                                </div>
                                 {isImmidiateEntrence && <div className="advert-field"><img alt="" src="https://images.yad2.co.il/Pic/yad2new/2016_icons/formitems/Immediate_on.png"></img><span className="orange">מיידי</span></div>}
                                 <div className="advert-field"> <span>דוא"ל</span><div>{": "}{userData.user.email}</div></div>
                                 <div className="advert-field"> <span>איש קשר</span><div>{": "}<input defaultValue={currentAdvert.contacts[0].contactName}></input></div></div>

@@ -46,3 +46,11 @@
 .num-input{
     width: 100px!important;
 }
+.content-column-wrapper{
+    .checkbox-wrapper{
+        width: 70px;
+        input{
+            width: 70px;
+        }
+    }
+}

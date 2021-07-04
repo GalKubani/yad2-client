@@ -10,6 +10,7 @@ import LoginRoute from './LoginRouter';
 import UserPersonalArea from '../components/userPersonalArea/UserPersonalArea'
 import UpdateUserData from '../components/userPersonalArea/UpdateUserData'
 import AddAdvert from '../components/newAdvert/AddAdvert'
+import AdvertContextProvider from '../context/AdvertContext'
 
 const AppRouter = () => (
     <BrowserRouter>
@@ -23,7 +24,9 @@ const AppRouter = () => (
                 <LoginRoute path="/personal-area" component={UserPersonalArea} />
                 <LoginRoute path="/personal-area-edit" component={UpdateUserData} />
                 <LoginRoute path="/new-advert" component={AddAdvert} />
-                <Route path="/home" component={Home} />
+                <AdvertContextProvider>
+                    <Route path="/home" component={Home} />
+                </AdvertContextProvider>
                 <Route path="*" component={PageNotFound} />
             </Switch>
             <Question />

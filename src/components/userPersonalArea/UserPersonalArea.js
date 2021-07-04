@@ -12,6 +12,7 @@ const UserPersonalArea = () => {
     const [userAdverts, setUserAdverts] = useState([])
     useEffect(() => {
         async function getAdverts() {
+            console.log("fetching adverts")
             try {
                 await findUserAdverts(userData.token).then((res) => { setUserAdverts(res) })
             } catch (err) { console.log(err) }

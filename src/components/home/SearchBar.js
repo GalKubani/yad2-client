@@ -8,7 +8,7 @@ import PriceModal from './PriceModal'
 
 const roomRange = ["הכל"]
 for (let i = 1; i <= 12; i += 0.5) { roomRange.push(i) }
-const SearchBar = () => {
+const SearchBar = ({ onSearchAttempt }) => {
 
     const [currentRoomRange, setCurrentRoomRange] = useState(roomRange)
     const [roomMinimumRange, setRoomMinimumRange] = useState()

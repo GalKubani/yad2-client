@@ -10,12 +10,12 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
 
     useEffect(() => {
         window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 })
-
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert, userAdvertsNumber])
     let assetPictures = [...currentAdvert.assetPictures];
     let assetSrc = []
     for (let picture of assetPictures) {
+        if (!picture) { continue }
         let binary = ''
         let bytes = [].slice.call(new Uint8Array(picture.data));
         bytes.forEach((b) => binary += String.fromCharCode(b));
