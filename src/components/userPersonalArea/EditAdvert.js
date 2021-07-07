@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../context/LoginContext'
-import { editAdvert, addAdvertMedia } from '../../server/db'
+import { deleteMediaFromS3, editAdvert, uploadMediaToS3 } from '../../server/db'
 import Calendar from 'react-calendar';
 import { calculateDate } from '../../utils/calculateDate'
 import PictureInput from '../newAdvert/PictureInput'
 import RadioOptions from '../newAdvert/RadioOptions'
 const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert }) => {
     const { userData } = useContext(LoginContext)
-    const [assetPicturesFile, setAssetPicturesFile] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
+    const [assetPicturesFileSrc, setAssetPicturesFile] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [assetPictureData, setAssetPictureData] = useState([undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined])
     const [isImmidiateEntrence, setIsImmidiateEntrence] = useState(false)
     const [dateValue, onChange] = useState(calculateDate(currentAdvert.dateOfEntry, true));
@@ -35,19 +35,20 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         let assetCondition = e.target.getElementsByTagName("select")[0]
         let textArea = e.target.getElementsByTagName("textarea")[0]
         let allRadioOptions = e.target.getElementsByClassName("radio_input")
-        let assetCharecteristics = [], assetPictures = [], assetCurrentPicturesIndex = []
+        let assetCharecteristics = [], assetPictures = [], removedPicsKeys = []
         let assetTotalParking, assetTotalPorchs
-        for (let i = 0; i < 10; i++) {
-            if (!assetPicturesFile[i] && !assetPictureData[i]) { continue }
-            else if (assetPicturesFile[i].includes("data:image/jpeg;base64,") && !assetPictureData[i]) {
-                assetCurrentPicturesIndex.push(i)
+        let existingImages = []
+        for (let picture of currentAdvert.assetPictures) {
+            if (assetPicturesFileSrc.includes(picture)) {
+                existingImages.push(picture)
             }
+            else { removedPicsKeys.push(picture.slice(picture.indexOf("s.com/") + 6)) }
+        }
+        for (let i = 0; i < 10; i++) {
+            if (!assetPicturesFileSrc[i] && !assetPictureData[i]) { continue }
             else { assetPictures.push(assetPictureData[i]) }
         }
-        let mediaData = {
-            assetPictures,
-            assetCurrentPicturesIndex
-        }
+        let mediaData = { assetPictures }
         for (let option of allRadioOptions) {
             if (option.checked) {
                 if (option.name === "porch") { assetTotalPorchs = option.value }
@@ -65,8 +66,10 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
             contacts: { contactName: allInputs[17].value, contactNumber: allInputs[18].value },
         }
         try {
-            await editAdvert(advertData, userData.token, currentAdvert._id).then(async () => {
-                await addAdvertMedia(mediaData, userData.token, currentAdvert._id).then(() => {
+            await uploadMediaToS3(mediaData, userData.token, currentAdvert._id).then(async (res) => {
+                deleteMediaFromS3(removedPicsKeys)
+                advertData.assetPictures = [...existingImages, ...res]
+                await editAdvert(advertData, userData.token, currentAdvert._id).then((res) => {
                     document.location.reload()
                 })
             })
@@ -81,23 +84,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         else { e.target.parentElement.classList.remove("box-active") }
     }
     useEffect(() => {
-        let assetPictures = [...currentAdvert.assetPictures];
-        let assetSrc = []
-        let srcData = []
-        const initialiseComponent = () => {
-            for (let picture of assetPictures) {
-                if (!picture) { continue }
-                let binary = ''
-                let bytes = [].slice.call(new Uint8Array(picture.data));
-                bytes.forEach((b) => binary += String.fromCharCode(b));
-                assetSrc.push(window.btoa(binary))
-            }
-        }
-        initialiseComponent()
-        for (let i = 0; i < 10; i++) {
-            srcData.push(assetPictures[i] ? ("data:image/jpeg;base64," + assetSrc[i]) : "")
-            if (srcData.length === 10) { setAssetPicturesFile(srcData) }
-        }
+        setAssetPicturesFile([...currentAdvert.assetPictures])
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert])
     useEffect(() => {
@@ -177,7 +164,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                         <div className="my-content-title">תמונות</div>
                         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => {
                             return (
-                                <PictureInput className={"my-advert-image-container"} value={index} key={index} assetPicturesFile={assetPicturesFile} dispatchUpdate={dispatchUpdate}
+                                <PictureInput className={"my-advert-image-container"} value={index} key={index} assetPicturesFile={assetPicturesFileSrc} dispatchUpdate={dispatchUpdate}
                                     assetPictureData={assetPictureData} />
                             )
                         })}

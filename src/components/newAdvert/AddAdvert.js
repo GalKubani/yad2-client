@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { addAdvertMedia, addNewAdvert } from '../../server/db'
+import { uploadMediaToS3, addNewAdvert } from '../../server/db'
 import AddressData from './AddressData'
 import ContactDetails from './ContactDetails'
 import PaymentAndDates from './PaymentsAndDates'
@@ -52,9 +52,10 @@ const AddAdvert = () => {
         }
         else {
             let advertData = { ...allFormData, ...dataReturned }
+            console.log("creating advert")
             try {
                 await addNewAdvert(advertData, userData.token).then(async (res) => {
-                    await addAdvertMedia(mediaFormData, userData.token, res._id).then(() => {
+                    await uploadMediaToS3(mediaFormData, userData.token, res._id).then((res) => {
                         history.push("/home")
                     })
                 })

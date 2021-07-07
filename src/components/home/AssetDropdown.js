@@ -7,8 +7,7 @@ const AssetDropdown = ({ onReturnData }) => {
         e.preventDefault()
         const sharedParentElement = e.target.parentElement;
         sharedParentElement.children[0].checked = !sharedParentElement.children[0].checked
-        if (sharedParentElement.children[0].checked) { sharedParentElement.children[1].classList.add("checkmark-checked") }
-        else { sharedParentElement.children[1].classList.remove("checkmark-checked") }
+        sharedParentElement.children[1].classList.toggle("checkmark-checked")
         let currentAssetData = assetData
         switch (sharedParentElement.children[0].value) {
             case "דירות": currentAssetData[1] = !currentAssetData[1]; break;

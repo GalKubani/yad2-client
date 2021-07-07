@@ -9,7 +9,11 @@ const ContactDetails = ({ onClickForward, currentClassName, onClickBack }) => {
     const onFinishArea = (e) => {
         e.preventDefault()
         let allInputs = e.target.getElementsByTagName("input")
-        if (!allInputs[0].value || !allInputs[1].value) { return }
+        if (!allInputs[0].value || !allInputs[1].value) {
+            if (!allInputs[0].value) { allInputs[0].classList.add("red") }
+            if (!allInputs[1].value) { allInputs[1].classList.add("red") }
+            return
+        }
         let contactsData = {
             contacts: [{
                 contactName: allInputs[0].value,
@@ -17,6 +21,9 @@ const ContactDetails = ({ onClickForward, currentClassName, onClickBack }) => {
             }]
         }
         onClickForward(contactsData)
+    }
+    const onInputBlur = (e) => {
+        e.target.classList.remove("red")
     }
     return (
         <div className={currentClassName}>
@@ -26,11 +33,11 @@ const ContactDetails = ({ onClickForward, currentClassName, onClickBack }) => {
                 <div className="contacts-container">
                     <div>
                         <label>שם איש קשר*</label>
-                        <input type="text" defaultValue={userData.user.name} autoComplete="off" className="text_input" />
+                        <input onBlur={onInputBlur} type="text" defaultValue={userData.user.name} autoComplete="off" className="text_input" />
                     </div>
                     <div>
                         <label>טלפון ראשי*</label>
-                        <input type="text" defaultValue={userData.user.mainPhone} autoComplete="off" className="text_input" />
+                        <input onBlur={onInputBlur} type="text" defaultValue={userData.user.mainPhone} autoComplete="off" className="text_input" />
                     </div>
                 </div>
                 <div className="buttonsNextPreviousWrap">

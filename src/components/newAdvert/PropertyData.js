@@ -11,7 +11,10 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
     const onFinishArea = (e) => {
         e.preventDefault()
         let roomData = e.target.getElementsByTagName("select")[0]
-        if (roomData.value * 1 === 0) { return }
+        if (roomData.value * 1 === 0) {
+            roomData.classList.add("red")
+            return
+        }
         let checkboxData = e.target.getElementsByClassName("property-checkbox")
         let allRadios = e.target.getElementsByClassName("radio_input")
         let textAreaValue = e.target.getElementsByTagName("textarea")[0].value
@@ -28,6 +31,9 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
         }
         onClickForward(propertyData)
 
+    }
+    const onInputBlur = (e) => {
+        e.target.classList.remove("red")
     }
     const onCheckBox = (e) => {
         let currentActive = e.target.parentElement.parentElement.getElementsByClassName("radio-active")[0]
@@ -52,7 +58,7 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
             <form onSubmit={onFinishArea}>
                 <div>
                     <label>מספר חדרים*</label>
-                    <select className="property-width">
+                    <select onBlur={onInputBlur} className="property-width">
                         {roomRange.map((value) => { return <option key={value} value={value}>{value}</option> })}
                     </select>
                 </div>

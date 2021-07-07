@@ -1,15 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Calendar from 'react-calendar'
+import RangeDropdown from '../main/RangeDropdown'
 
 
 const checkboxOptions = ["חניה", "מעלית", "מרפסת", "מיזוג", "משופצת", "מרוהטת"]
-const AdvancedSearch = () => {
+const floorsOption = ["הכל"]
+for (let i = 1; i <= 12; i += 1) { floorsOption.push(i) }
+const AdvancedSearch = ({ onConfirmAdvancedSearch }) => {
 
-
-
+    const [dateValue, onChange] = useState(new Date());
+    const [minimumRange, setMinimumRange] = useState()
+    const [maximumRange, setMaximumRange] = useState()
+    const [isCalendarVisible, setIsCalendarVisible] = useState(false)
     const onBoxClick = (e) => {
-
-        e.target.parentElement.children[0].checked = !e.target.parentElement.children[0].checked
-
+        const sharedParentElement = e.target.parentElement;
+        sharedParentElement.children[0].checked = !sharedParentElement.children[0].checked
+        sharedParentElement.children[1].classList.toggle("checkmark-checked")
+    }
+    useEffect(() => { setIsCalendarVisible(false) }, [dateValue])
+    const onClearForm = (e) => {
+        e.preventDefault()
+        onChange(new Date())
+        setMinimumRange()
+        setMaximumRange()
+        let allCheckboxes = document.getElementsByClassName("advanced-search-container")[0].getElementsByClassName("checkbox")
+        for (let box of allCheckboxes) {
+            box.checked = false
+            box.nextElementSibling.classList.remove("checkmark-checked")
+        }
+        let floorButton = document.getElementsByClassName("text_input smaller placeholder")[1]
+        let insideTextInputs = document.getElementsByClassName("dropdown_content room-range")[1].getElementsByTagName("input")
+        insideTextInputs[0].value = ""
+        insideTextInputs[1].value = ""
+        floorButton.children[1].innerHTML = "קומה"
+        let sizeInputs = document.getElementsByClassName("range-input")[0].getElementsByTagName("input")
+        sizeInputs[0].value = ""
+        sizeInputs[1].value = ""
+    }
+    const onAdvancedSearch = (e) => {
+        // will nn to take all the data from here up to search bar, and start search with all parameters
+        // from both components, will also nn to see how to implement range categories
+        let searchData = {}
+        onConfirmAdvancedSearch(searchData)
     }
     return (
         <div className="dropdown-content advanced-search-container">
@@ -24,10 +56,32 @@ const AdvancedSearch = () => {
                         </li>
                     )
                 })}
-
             </ul>
-            <ul className="advance-search-row"></ul>
-            <ul className="advance-search-row"></ul>
+            <ul className="advance-search-row">
+                <li className="range-input-wrapper">
+                    <label className="label-title">גודל דירה (במ"ר)</label>
+                    <div className="range-input">
+                        <input placeholder="מ-"></input>
+                        <input placeholder="עד-"></input>
+                    </div>
+                </li>
+                <RangeDropdown minimumRange={minimumRange} setMinimumRange={setMinimumRange} maximumRange={maximumRange} setMaximumRange={setMaximumRange} labelClassName={"label-title"} dropName="קומה" dropInterval={1} optionRange={floorsOption} />
+                <li className="date-input-wrapper">
+                    <label className="label-title">תאריך כניסה</label>
+                    <input placeholder="החל מ- הזינו תאריך" onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} onChange={() => { }} type="text" autoComplete="off" value={dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })} className="text_input wider" />
+                    {isCalendarVisible && <div className="absolute-cal">  <Calendar onChange={onChange} minDate={new Date()} locale="he-IL" calendarType="Hebrew" /></div>}
+                </li>
+            </ul>
+            <ul className="advance-search-row">
+                <li className="buttons-container">
+                    <button onClick={onAdvancedSearch} className="default-button">
+                        <svg className="svg-search-icon" role="img" viewBox="0 0 19.9 19.7">
+                            <g fill="none" stroke="white"><path strokeLinecap="square" d="M18.5 18.3l-5.4-5.4" /><circle cx="8" cy="8" r="7" /></g>
+                        </svg>     <span>חיפוש</span>
+                    </button>
+                    <div className="clear-form-wrap">   <button onClick={onClearForm}>נקה</button>  </div>
+                </li>
+            </ul>
         </div>
     )
 }

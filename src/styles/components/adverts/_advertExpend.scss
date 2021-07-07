@@ -1,0 +1,15 @@
+.advert-expanded{
+
+    margin: 0px;
+    max-height: 0px;
+    overflow-y: hidden;
+    background-color: #fff;
+    width: 100%;
+    transition: max-height .3s ease;
+}
+.advert-expanded.shown{
+    max-height: 1000px; 
+    margin: 10px 0;
+    border-top: 1px solid #e5e5e5;
+
+}

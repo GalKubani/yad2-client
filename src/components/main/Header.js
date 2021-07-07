@@ -22,6 +22,7 @@ const Header = () => {
     const onLoginClick = () => {
         setIsLoginClicked(!isLoginClicked)
     }
+
     return (
         <div className="header">
             {document.documentElement.clientWidth > 450 ? <div className="header__nav">
@@ -97,8 +98,9 @@ const Header = () => {
                             </li>
                         </ul>
                     </nav> : ""}
-                </div>}
-        </div>
+                </div>
+            }
+        </div >
     )
 }
 

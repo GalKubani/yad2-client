@@ -12,15 +12,10 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
         window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 })
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert, userAdvertsNumber])
+
+
     let assetPictures = [...currentAdvert.assetPictures];
-    let assetSrc = []
-    for (let picture of assetPictures) {
-        if (!picture) { continue }
-        let binary = ''
-        let bytes = [].slice.call(new Uint8Array(picture.data));
-        bytes.forEach((b) => binary += String.fromCharCode(b));
-        assetSrc.push(window.btoa(binary))
-    }
+
     const onClickEdit = (e) => {
         e.preventDefault()
         setIsAdvertClicked(false)
@@ -118,7 +113,7 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
                         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => {
                             return (
                                 <div className="my-advert-image-container" key={index}>
-                                    <img alt="" src={assetPictures[index] ? ("data:image/jpeg;base64," + assetSrc[index]) : "https://my.yad2.co.il//newOrder/images/publish/selectImage.png"}></img>
+                                    <img alt="" src={assetPictures[index] ? assetPictures[index] : "https://my.yad2.co.il//newOrder/images/publish/selectImage.png"}></img>
                                 </div>)
                         })}
                     </div>

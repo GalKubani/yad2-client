@@ -9,7 +9,14 @@ const PaymentAndDates = ({ onClickForward, currentClassName, onClickBack }) => {
     const onFinishArea = (e) => {
         e.preventDefault()
         let allInputs = e.target.getElementsByTagName("input")
-        if (!allInputs[1].value) { return }
+        if (!allInputs[1].value) {
+            allInputs[1].classList.add("red")
+            return
+        }
+        if (allInputs[2].value < 100000 && allInputs[2].value !== 0) {
+            allInputs[2].classList.add("red")
+            return
+        }
         let PaymentAndDatesData = {
             assetSize: allInputs[0].value * 1,
             assetBuiltSize: allInputs[1].value * 1,
@@ -18,8 +25,13 @@ const PaymentAndDates = ({ onClickForward, currentClassName, onClickBack }) => {
         }
         onClickForward(PaymentAndDatesData)
     }
+    const onInputBlur = (e) => {
+        e.target.classList.remove("red")
+    }
     useEffect(() => { setIsCalendarVisible(false) }
         , [dateValue])
+
+
     return (
         <div className={currentClassName}>
             <span className="number-icon">3</span>
@@ -30,12 +42,12 @@ const PaymentAndDates = ({ onClickForward, currentClassName, onClickBack }) => {
                     <input type="text" autoComplete="off" placeholder='כמה מ"ר יש בנכס' className="text_input wider" />
                 </div>
                 <div>
-                    <label className="smaller-margin">גודל במ"ר סך הכל*</label>
+                    <label onBlur={onInputBlur} className="smaller-margin">גודל במ"ר סך הכל*</label>
                     <input type="text" autoComplete="off" className="text_input wider" />
                 </div>
                 <div>
                     <label>מחיר</label>
-                    <input type="text" autoComplete="off" placeholder="סכום מינימלי 100,000₪" className="text_input wider" />
+                    <input onBlur={onInputBlur} type="text" autoComplete="off" placeholder="סכום מינימלי 100,000₪" className="text_input wider" />
                 </div>
                 <div className="calendar-wrapper" >
                     <label>תאריך כניסה*</label>

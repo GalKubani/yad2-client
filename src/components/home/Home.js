@@ -12,14 +12,18 @@ const Home = () => {
     document.getElementsByTagName("title")[0].innerHTML = `נדל"ן למכירה יד2 | אלפי מודעות חדשות בכל יום`
 
     const onSearchAttempt = (searchData) => {
+        // will nn to process range data and other search options here and then submit a filter 
         // will filter all adverts from info in the search data and then save the currently shown
     }
-    useEffect(async () => {
-        await getAllAdverts().then((res) => {
-            advertDispatch(getAdvertsAction(res))
-            setCurrentlyShownAdverts(res)
-        })
-    }, [])
+    useEffect(() => {
+        async function fetchData() {
+            await getAllAdverts().then((res) => {
+                advertDispatch(getAdvertsAction(res))
+                setCurrentlyShownAdverts(res)
+            })
+        }
+        fetchData()
+    }, [advertDispatch])
     return (
         <div className="home">
             <div className="commercial-container">פרסומת</div>

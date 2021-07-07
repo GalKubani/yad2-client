@@ -1,10 +1,9 @@
 import React from 'react'
 
-const AdvertExpand = () => {
+const AdvertExpand = ({ advert }) => {
 
     return (
-        <div className="advert-expanded">
-
+        <div className="advert-expanded hidden">
         </div>
     )
 }

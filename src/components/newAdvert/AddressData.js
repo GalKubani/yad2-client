@@ -37,10 +37,12 @@ const AddressData = ({ onClickForward, currentClassName }) => {
         e.target.parentElement.parentElement.previousElementSibling.value = e.target.children[0].innerText
         e.target.parentElement.parentElement.style.display = "none"
     }
-    const onStreetBlur = () => {
-        setNeighborhoodShown(neighborhoodOptionsShown[0]?.split("//")[0].split("שכ")[1])
+    const onStreetBlur = (e) => {
+        e.target.classList.remove("red")
+        setNeighborhoodShown(neighborhoodOptionsShown[0]?.split("//")[0].split("שכ")[1] || "רמון")
     }
     const onCityBlur = async (e) => {
+        e.target.classList.remove("red")
         try {
             getCityDataFromDB(e.target.value).then((cityData) => {
                 setNeighborhoodOptionsShown(cityData["neighborhoods"])
@@ -68,11 +70,22 @@ const AddressData = ({ onClickForward, currentClassName }) => {
         })
         return filteredData
     }
+    const onInputBlur = (e) => {
+        e.target.classList.remove("red")
+    }
     const onFinishArea = (e) => {
         e.preventDefault()
         let allInputs = e.target.getElementsByTagName("input")
         let allSelects = e.target.getElementsByTagName("select")
-        if (allSelects[0].value === "" || allSelects[1].value === "" || allInputs[0].value === "") { return }
+        if (allSelects[0].value === "" || allSelects[1].value === "" || allInputs[0].value === ""
+            || allInputs[1].value === "" || allInputs[3].value === "") {
+            if (allSelects[0].value === "") { allSelects[0].classList.add("red") }
+            if (allSelects[1].value === "") { allSelects[1].classList.add("red") }
+            if (allInputs[0].value === "") { allInputs[0].classList.add("red") }
+            if (allInputs[1].value === "") { allInputs[1].classList.add("red") }
+            if (allInputs[3].value === "") { allInputs[3].classList.add("red") }
+            return
+        }
         let addressData = {
             assetType: allSelects[0].value,
             assetCondition: allSelects[1].value,
@@ -91,16 +104,16 @@ const AddressData = ({ onClickForward, currentClassName }) => {
                 <h4>סימנו עבורך את שדות החובה. שלא נפספס פרט חשוב</h4>
                 <div>
                     <label>סוג הנכס*</label>
-                    <select>
+                    <select onBlur={onInputBlur}>
                         <option value="">דירה או אולי פנטהאוז?</option>
                         <option value="דירה"> דירה</option>
-                        <option value="בית"> בית-קרקע</option>
+                        <option value="בית-קרקע"> בית-קרקע</option>
                         <option value="גג/פנטהאוז">גג/פנטהאוז</option>
                     </select>
                 </div>
                 <div>
                     <label>מצב הנכס*</label>
-                    <select>
+                    <select onBlur={onInputBlur}>
                         <option value="">משופץ? חדש מקבלן? </option>
                         <option value="חדש מקבלן (לא גרו בו בכלל)">חדש מקבלן (לא גרו בו בכלל)</option>
                         <option value=" חדש (נכס בן עד 5 שנים)"> חדש (נכס בן עד 5 שנים) </option>
@@ -138,7 +151,7 @@ const AddressData = ({ onClickForward, currentClassName }) => {
                 </div>
                 <div>
                     <label>מס' בית</label>
-                    <input disabled={!didSelectCity} type="text" className="text_input smaller-width" />
+                    <input onBlur={onInputBlur} disabled={!didSelectCity} type="text" className="text_input smaller-width" />
                 </div>
                 <div className="buttonsNextPreviousWrap">
                     <button type="submit" className="btnNext no-focus-outline">להמשיך לשלב הבא</button>

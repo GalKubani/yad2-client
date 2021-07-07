@@ -144,3 +144,32 @@ export const deleteAdvert = async (token, advertId) => {
         throw new Error(err)
     }
 }
+export const uploadMediaToS3 = async (formData, token, advertId) => {
+    try {
+        let parsedData = new FormData()
+        for (let file of formData.assetPictures) {
+            if (file) {
+                parsedData.append("assetPictures", file)
+            }
+        }
+        let res = await Axios.post(DB_URL + "/adverts/add-pictures?id=" + advertId, parsedData, {
+            headers: {
+                "Content-Type": 'multipart/form-data',
+                'Authorization': 'Bearer ' + token
+            }
+        })
+        return res.data
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+export const deleteMediaFromS3 = async (pictureKeys) => {
+    try {
+        for (let key of pictureKeys) {
+            await Axios.delete(DB_URL + "/adverts/delete-picture?key=" + key)
+        }
+        return "done"
+    } catch (err) {
+        throw new Error(err)
+    }
+}
