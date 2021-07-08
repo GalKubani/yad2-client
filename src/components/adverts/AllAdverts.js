@@ -1,11 +1,18 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import RecentlySold from './RecentlySold'
 import AdvertsDisplay from './AdvertsDisplay'
 import AdvertsFilters from './AdvertFilters'
 import { AdvertContext } from '../../context/AdvertContext'
+import Pagination from './Pagination'
 
 const AllAdverts = ({ currentlyShownAdverts, setCurrentlyShownAdverts }) => {
     const { allAdverts } = useContext(AdvertContext)
+    const [advertsPerPage] = useState(5)
+    const [currentPage, setCurrentPage] = useState(1);
+    const indexOfLastAdvert = currentPage * advertsPerPage
+    const indexOfFirstAdvert = indexOfLastAdvert - advertsPerPage
+    const advertsOnPage = currentlyShownAdverts.slice(indexOfFirstAdvert, indexOfLastAdvert)
+
     const updateFilter = (filterOptions) => {
         let filteredAdvertsArray = []
         filteredAdvertsArray = allAdverts.filter((advert) => {
@@ -28,11 +35,13 @@ const AllAdverts = ({ currentlyShownAdverts, setCurrentlyShownAdverts }) => {
         else { sortedAdvertArray.sort(function (a, b) { return b.assetPrice - a.assetPrice }) }
         setCurrentlyShownAdverts([...sortedAdvertArray])
     }
+    const paginate = (pageNumber) => setCurrentPage(pageNumber)
     return (
         <div className="adverts-display-container">
             <div className="adverts-container">
                 <AdvertsFilters advertCount={currentlyShownAdverts.length} updateFilter={updateFilter} updateAdvertSorting={updateAdvertSorting} />
-                <AdvertsDisplay shownAdverts={currentlyShownAdverts} />
+                <AdvertsDisplay shownAdverts={advertsOnPage} />
+                <Pagination currentPage={currentPage} paginate={paginate} advertsPerPage={advertsPerPage} totalAdverts={currentlyShownAdverts.length} />
             </div>
             <RecentlySold />
         </div>

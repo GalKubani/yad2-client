@@ -13,13 +13,13 @@ const PaymentAndDates = ({ onClickForward, currentClassName, onClickBack }) => {
             allInputs[1].classList.add("red")
             return
         }
-        if (allInputs[2].value < 100000 && allInputs[2].value !== 0) {
+        if (allInputs[2].value < 100000 && allInputs[2].value) {
             allInputs[2].classList.add("red")
             return
         }
         let PaymentAndDatesData = {
-            assetSize: allInputs[0].value * 1,
-            assetBuiltSize: allInputs[1].value * 1,
+            assetBuiltSize: allInputs[0].value * 1,
+            assetSize: allInputs[1].value * 1,
             assetPrice: allInputs[2].value * 1,
             dateOfEntry: allInputs[3].value
         }

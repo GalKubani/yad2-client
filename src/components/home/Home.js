@@ -8,8 +8,8 @@ import SearchBar from './SearchBar'
 const Home = () => {
     const { advertDispatch } = useContext(AdvertContext)
     const [currentlyShownAdverts, setCurrentlyShownAdverts] = useState([])
-
     document.getElementsByTagName("title")[0].innerHTML = `נדל"ן למכירה יד2 | אלפי מודעות חדשות בכל יום`
+
 
     const onSearchAttempt = (searchData) => {
         // will nn to process range data and other search options here and then submit a filter 
@@ -19,7 +19,10 @@ const Home = () => {
         async function fetchData() {
             await getAllAdverts().then((res) => {
                 advertDispatch(getAdvertsAction(res))
-                setCurrentlyShownAdverts(res)
+                setCurrentlyShownAdverts(res.sort(function (a, b) {
+                    if (new Date(a.updatedAt) - new Date(b.updatedAt) > 0) { return -1 }
+                    else { return 1 }
+                }))
             })
         }
         fetchData()

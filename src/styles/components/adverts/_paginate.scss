@@ -1,0 +1,30 @@
+.paginate-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}
+.number-wrapper{
+    display: flex;
+    flex-direction: row-reverse;
+    li{
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        width: 25px;
+        height: 25px;
+    }
+    li:hover{
+        font-weight: 500;
+        border-radius: 3px;
+        background-color: #fff1e5;
+    }
+    .active-page{
+        font-weight: 500;
+        border-radius: 3px;
+        background-color: #fff1e5;
+        color: #ff7100;
+    }
+}
