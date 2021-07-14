@@ -1,4 +1,3 @@
-
 .advanced-search-container{
     left: 0;
     background-color: #fff;
@@ -95,4 +94,31 @@
 }
 .buttons-container{
     display: flex;
+}
+@media (max-width:400px){
+    .advanced-search-container{
+        width: 100vw;
+    }
+    .clear-form-wrap{
+        button{
+            transform: unset;
+        }
+    }
+    .advance-search-row{
+        margin: 0px;
+        align-items: unset;
+        flex-flow: unset;
+        flex-wrap: wrap;
+    }
+    .date-input-wrapper{
+        width: 100%;
+        max-width: unset;
+        .react-calendar{
+            width: 250px;
+        }
+    }
+    .range-input-wrapper{
+        width: 100%;
+        max-width: unset;
+    }
 }

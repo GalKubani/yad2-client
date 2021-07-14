@@ -3,13 +3,13 @@ import { LoginContext } from '../../context/LoginContext'
 import { deleteAdvert, editAdvert } from '../../server/db'
 import { calculateDate } from '../../utils/calculateDate'
 
-const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert }) => {
+const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert }) => {
 
     const [isImmidiateEntrence, setIsImmidiateEntrence] = useState(false)
     const { userData } = useContext(LoginContext)
 
     useEffect(() => {
-        window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 })
+        document.documentElement.clientWidth > 450 ? window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 }) : console.log("")
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert, userAdvertsNumber])
 
@@ -20,7 +20,6 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
         e.preventDefault()
         setIsAdvertClicked(false)
         setIsAdvertEditClicked(true)
-        // will nn to close this, and open on other comp for editing
     }
     const onChangeActiveStatus = async (e) => {
         e.preventDefault()
@@ -53,6 +52,11 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
                 document.location.reload()
             })
         } catch (err) { console.log(err) }
+    }
+    const onClickReturn = (e) => {
+        e.preventDefault()
+        setIsAdvertClicked(false)
+        setAreAdvertsShown(true)
     }
     return (
         <tr>
@@ -95,7 +99,7 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
                             </div>
                         </div>
                     </div>
-                    <div className="my-advert-management">
+                    {document.documentElement.clientWidth > 450 ? <div className="my-advert-management">
                         <div className="my-content-title">ניהול</div>
                         <button onClick={onClickEdit} className="edit-button"> <span>עריכת פרטים</span> </button>
                         <div className="edit-status-container">
@@ -107,7 +111,14 @@ const MyAdvert = ({ userAdvertsNumber, setIsAdvertEditClicked, setIsAdvertClicke
                             <button className="delete-advert-button" onClick={onJumpAdvert}>הקפצת מודעה</button>
                             <button onClick={onDeleteAdvert} className="delete-advert-button">🗑 מחיקת מודעה</button>
                         </div>
-                    </div>
+                    </div> :
+                        <div className="my-advert-management">
+                            <div className="logo-button edit" onClick={onClickEdit}> <span>עריכה</span> </div>
+                            <div className="logo-button jump" onClick={onJumpAdvert}><span>הקפץ</span> </div>
+                            <div className="logo-button delete" onClick={onDeleteAdvert}><span>מחק</span> </div>
+                            <div className="logo-button back" onClick={onClickReturn}><span>חזור</span> </div>
+                        </div>
+                    }
                     <div className="my-advert-pictures">
                         <div className="my-content-title">תמונות</div>
                         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((index) => {

@@ -15,18 +15,21 @@
     border-top: 1px solid #e5e5e5;
 }
 .advert-expanded-blank{
-    width: 200px;
+    width: 28%;
     height: 100%;
     background-color: #f9f9f9;
 }
 .asset-description-container{
     width: calc(100% - 200px);
     padding: 5px 15px 10px 10px;
+    label{
+        font-weight: 700;
+    }
 }
 .abs{
     position: absolute;
-    bottom: 53%;
-    right: 30%;
+    top:96px;
+    right: 210px;
     border: 0px;
 }
 .right-expanded{
@@ -58,4 +61,85 @@
 }
 .show-number-button.shown{
     display: unset;
+}
+.info-grid{
+    display: grid;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    grid-template-columns: 1fr 1fr;
+    div{
+        font-size: .75rem;
+        line-height: 1.25rem;
+        color: #363636;
+        display: flex;
+        align-items: center;
+        padding: 5px 0 0 5px;
+        width: 100%;
+        label{
+            margin-right: 4px;
+        }
+    }
+}
+.images-display-popup{
+    padding-top: 24px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-height: 100%;
+    background-color: #3f3f3f;
+}
+.visible{
+    content: ""; 
+    opacity: 1;
+    transform: scale(1);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-property: opacity,transform;
+    display: inline-block;
+    border-radius: 5px;
+    z-index: 1000;
+    text-align: right;
+    height: 580px;
+    width: 581px;
+    position: relative;
+    background: transparent;
+}
+.expanded-image{
+    width: 481px;
+    height: 520px;
+}
+.modal-pictures{
+    @extend .modal-active;
+}
+.modal-pictures::after{
+    opacity: 1;
+}
+@media(max-width:400px){
+    .advert-expanded-blank{
+        display: none;
+    }
+    .abs{
+        right:170px;
+        top:140px;
+    }
+    .unset-width{
+        overflow: hidden;
+        width: calc(100% - 212px);
+    }
+    .asset-description-container{
+        width: 100%;
+    }
+    .show-number-button{
+        width: 140px;
+        bottom: 50px;
+        right:210px;
+    }
+    .visible{
+        width: 320px;
+        height: 360px;
+    }
+    .expanded-image{
+        width: 320px;
+        height: 360px;
+    }
 }

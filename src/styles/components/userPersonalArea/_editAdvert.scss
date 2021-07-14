@@ -54,3 +54,29 @@
         }
     }
 }
+@media(max-width:400px){
+    .my-advert-management.editing{
+        position: unset;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .my-advert-content.editing{
+        .react-calendar{
+            max-width: unset;
+            width:250px;
+        }
+        .advert-content-column.editing{
+            width: 60%;
+        }
+        .checkbox-wrapper{
+            margin: 4px;
+        }
+        .radio-field.editing{
+            .property-width{
+                left:-16px;
+                display:block;
+            }
+        }
+    }
+}

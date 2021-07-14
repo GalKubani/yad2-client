@@ -57,13 +57,13 @@ li,ul{
 .searchbar-header-button{
     font-size: .85rem;
     line-height: 1.25rem;
-    font-weight: 6s00;
-    height: 30px;
+    font-weight: 600;
+    height: 36px;
     width: 215px;
+    border: 2px solid #ff7100;
     padding: 0;
     background-color: #fff;
     color: #ff7100;
-    border-color: #ff7100;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -192,4 +192,56 @@ li,ul{
 }
 .roomlist-item:hover{
     background-color: #eee
+}
+@media (max-width:400px){
+    .search-columns{
+        flex-wrap: wrap;
+        max-width: unset;
+    }
+    .search-column{
+        .dropdown_content.room-range{
+            left: 86px; 
+            .text_input{
+                width: unset;
+                min-width: 70px;
+            }
+        }
+        .text_input{
+            width: 300px;
+        }
+        .text_input.smaller{
+            width: 150px;
+        }
+        .dropdown_content.inside,.dropdown_content.inside-left{
+            left: unset;
+            right: unset;
+            top: 60px;
+            width: 60px;
+        }
+        .dropdown_content.inside-left{
+            right: 96px;
+        }
+        .default-button,.advanced-search-button{
+            width: 300px;
+            margin: 0 auto;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        .bigger{
+            .arrow{
+                top: 218px;
+            }
+        }
+        .arrow{
+            right: 100px;
+        }
+        .arrow.from{
+            right: unset;
+        }
+        .arrow.max{
+            width: 8px;
+            right: 90px;
+        }
+
+    }
 }

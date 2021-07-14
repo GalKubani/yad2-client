@@ -87,7 +87,7 @@ const PropertyData = ({ onClickForward, currentClassName, onClickBack }) => {
                         })}
                     </div>
                 </div>
-                <div className="narrower">
+                <div className={document.documentElement.clientWidth > 450 ? "narrower" : ""}>
                     <div><label className="larger-text">מה חשוב לך שידעו על הנכס?</label></div>
                     <div>
                         <label>פרוט הנכס</label>

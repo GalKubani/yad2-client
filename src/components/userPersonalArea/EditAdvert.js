@@ -95,7 +95,19 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         <tr>
             <td colSpan="10">
                 <form onSubmit={onFormSubmit} className="my-advert-container">
-                    <div className="my-advert-content">
+                    <div className="my-advert-management editing">
+                        <div className="my-content-title">ניהול</div>
+                        <button onClick={onClickReturn} className="delete-advert-button">חזרה</button>
+                        <div className="edit-status-container">
+                            <span>סטטוס:</span>
+                            <select defaultValue={currentAdvert.isAdvertActive}>
+                                <option value={true}>מודעה פעילה</option>
+                                <option value={false}>לא פעילה</option>
+                            </select>
+                        </div>
+                        <button type="submit" className="edit-button">עדכן </button>
+                    </div>
+                    <div className="my-advert-content editing">
                         <div className="my-content-title">תיאור המודעה</div>
                         <div className="content-column-wrapper">
                             <div className="advert-content-column">
@@ -117,9 +129,9 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                                 <div className="advert-field"> <span>קומה</span><div>{": "}{currentAdvert.assetFloorNumber || "ללא"}</div></div>
                                 <div className="advert-field"> <span>מתוך קומות</span><div>{": "}{currentAdvert.assetBuildingTotalFloors || "ללא"}</div></div>
                                 <div className="advert-field"> <span>מספר חדרים</span><div>{": "}{currentAdvert.assetTotalRooms}</div></div>
-                                <div className="advert-field radio-field"> <span>מרפסת:</span><div className="property-width"><RadioOptions radioName="porch" onCheckBox={onCheckRadio} /></div></div>
+                                <div className="advert-field radio-field editing"> <span>מרפסת:</span><div className="property-width"><RadioOptions radioName="porch" onCheckBox={onCheckRadio} /></div></div>
                                 <div className="advert-field"> <span>גודל במ"ר</span><div>{": "}<input defaultValue={currentAdvert.assetSize}></input> </div></div>
-                                <div className="advert-field radio-field"> <span>חניה:</span><div className="property-width"><RadioOptions radioName="parking" onCheckBox={onCheckRadio} /></div></div>
+                                <div className="advert-field radio-field editing"> <span>חניה:</span><div className="property-width"><RadioOptions radioName="parking" onCheckBox={onCheckRadio} /></div></div>
                             </div>
                             <div className="advert-content-column">
                                 <div className="content-column-wrapper">
@@ -135,7 +147,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                                     <div className="advert-field"> <span>תיאור ופרטים נוספים(עד 400 תווים):</span><div><textarea onInput={onTextAreaInput} defaultValue={currentAdvert.assetDetails}></textarea></div></div>
                                 </div>
                             </div>
-                            <div className="advert-content-column">
+                            <div className="advert-content-column editing">
                                 <div className="calendar-wrapper" >
                                     <label>תאריך כניסה*</label>
                                     <input onClick={() => { setIsCalendarVisible(!isCalendarVisible) }} onChange={() => { }} type="text" autoComplete="off" value={dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })} className="text_input wider" />
@@ -147,18 +159,6 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
                                 <div className="advert-field"> <span>טלפון ראשי</span><div>{": "}<input type="text" className="num-input" defaultValue={currentAdvert.contacts[0].contactNumber}></input></div></div>
                             </div>
                         </div>
-                    </div>
-                    <div className="my-advert-management">
-                        <div className="my-content-title">ניהול</div>
-                        <button onClick={onClickReturn} className="delete-advert-button">חזרה</button>
-                        <div className="edit-status-container">
-                            <span>סטטוס:</span>
-                            <select defaultValue={currentAdvert.isAdvertActive}>
-                                <option value={true}>מודעה פעילה</option>
-                                <option value={false}>לא פעילה</option>
-                            </select>
-                        </div>
-                        <button type="submit" className="edit-button">עדכן </button>
                     </div>
                     <div className="my-advert-pictures">
                         <div className="my-content-title">תמונות</div>

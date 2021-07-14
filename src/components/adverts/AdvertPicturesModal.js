@@ -1,19 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const AdvertPicturesModal = ({ closeModal }) => {
-
+const AdvertPicturesModal = ({ pictures, closeModal }) => {
+    const [pictureIndex, setPictureIndex] = useState(0)
 
     const onModalClick = (e) => {
-        if (e.target.className === "modal-container modal-active") {
-            closeModal()
-        }
+        e.stopPropagation()
+        closeModal(e.target.parentElement)
+    }
+    const onPictureClick = (e) => {
+        e.stopPropagation()
+        if (pictures.length - 1 === pictureIndex) { setPictureIndex(0) }
+        else { setPictureIndex(pictureIndex + 1) }
     }
     return (
-        <div onClick={onModalClick} className="modal-container modal-active">
-            <section className="modal-content viewable"><strong className="modal-title">המחיר שהוזן נמוך מהצפוי לדירה למכירה</strong>
-
+        <span onClick={onModalClick} className="modal-container modal-pictures">
+            <section className="modal-content visible">
+                <div className="images-display-popup">
+                    <img onClick={onPictureClick} src={pictures[pictureIndex]} className="expanded-image"></img>
+                    <span>{"תמונה " + (pictureIndex + 1) + " מתוך " + (pictures.length)}</span>
+                </div>
             </section>
-        </div>
+        </span>
     )
 }
 

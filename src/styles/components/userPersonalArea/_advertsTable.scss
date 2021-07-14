@@ -1,5 +1,5 @@
 .adverts-table{
-    width: 1000px;
+    width: 100%;
     background-color: #EEEEF3;
     margin: 0 auto 40px auto;
     padding-bottom: 20px;
@@ -144,9 +144,17 @@
     margin-right: 6px;
     cursor: pointer;
     display: block;
-    width: 75%;
+    width: 80%;
     border: none;
     margin-top: 10px;
+    span::before{
+        content: "✎";
+    }
+}
+.edit-mobile{
+    border: none;
+    color: #ff6600;
+    font-size: 2rem;
     span::before{
         content: "✎";
     }
@@ -179,4 +187,104 @@
     margin-top: 20px;
     @extend .edit-status-button;
     width:80%;
+}
+.mobile-advert{
+    height: 83px;
+    font-size: 14px;
+    .img-wrapper-user{
+        width: 100px;
+    }
+    td{
+        border-top:1px solid  #FDFCFC;
+        border-bottom:1px solid  #CBCBCB;
+    }
+    img{
+        float: right;
+        margin: 2px 10px;
+        width: 90px;
+        height: 65px
+    }
+}
+.mobile-advert-text{
+    font-size: 14px;
+}
+@media (max-width:400px){
+    .personal-area-container{
+        width: 100%;
+    }
+    .edit-form-content{
+        flex-direction: column;
+    }
+    .update-button{
+        right: unset;
+        width: 100px;
+    }
+    .personal-area-header{
+        font-size: 1.3rem;
+    }
+    .my-advert-container{
+        padding: 0;
+        flex-direction: column;
+        .my-advert-pictures,.my-advert-management,.my-advert-content{
+            width: 100%;
+            padding: 0;
+            border-radius: unset;
+        }
+        .my-advert-image-container{
+            width:unset;
+        }
+        .my-content-title{
+            border-radius: unset;
+        }
+    }
+    .my-advert-management{
+        position: fixed;
+        bottom: 0;
+        z-index: 9;
+        margin: 0px;
+        height: unset;
+        .logo-button{
+            background-repeat: no-repeat!important;
+            width: 25%;
+            height: 55px;
+            text-align: center;
+            background: #FE7011;
+            display: inline-block;
+            vertical-align: bottom;
+            color: white;
+        }
+        .logo-button.edit{
+            background-size: 30px 30px;
+            span{
+                position: relative;
+                top: 34px;
+                left: 0;
+                width: 100%;
+                text-align: center;
+            }
+            background-position: 50% 5px;
+            background-image: url(//images.yad2.co.il/Pic/yad2mobile/my/personalArea/edit.png);
+        }
+        .logo-button.back{
+            @extend .logo-button.edit;
+            background-image: url(//images.yad2.co.il/Pic/yad2mobile/flat/new_back.png);
+        }
+        .logo-button.jump{
+            @extend .logo-button.edit;
+            background-image: url(//images.yad2.co.il/Pic/yad2mobile/my/personalArea/jump.png);
+        }
+        .logo-button.delete{
+            @extend .logo-button.edit;
+            background-image: url(//images.yad2.co.il/Pic/yad2mobile/my/personalArea/delete.png);
+        }
+    }
+    .my-advert-pictures{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    .advert-content-column{
+        width: 45%;
+        border: unset;
+    }
 }

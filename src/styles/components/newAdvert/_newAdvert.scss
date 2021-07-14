@@ -122,3 +122,9 @@
         margin-left: 60%!important;
     }
 }
+@media(max-width:400px){
+    .contacts-container{
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+}

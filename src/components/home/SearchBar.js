@@ -20,6 +20,7 @@ const SearchBar = ({ onSearchAttempt }) => {
     const [cityOptionsShown, setCityOptionsShown] = useState([])
     const [neighborhoodOptionsShown, setNeighborhoodOptionsShown] = useState([])
     const [assetOptionsSelected, setAssetOptionsSelected] = useState("בחרו סוגי נכסים")
+    const [assetSearchOptions, setAssetSearchOption] = useState([])
 
     const onAssetsClick = (e) => {
         setDidClickOnAssets(!didClickOnAssets)
@@ -78,7 +79,7 @@ const SearchBar = ({ onSearchAttempt }) => {
 
     const onReturnData = (data) => {
         let counter = 0
-        let dataNames = ["כל סוגי הנכסים", "דירות", "בתים", "גג/פנטהאוז"]
+        let dataNames = ["כל סוגי הנכסים", "דירה", "בית-קרקע", "גג/פנטהאוז"]
         let dataSent = []
         data.map((value, i) => {
             if (value) {
@@ -90,21 +91,32 @@ const SearchBar = ({ onSearchAttempt }) => {
         if (counter === 0) { setAssetOptionsSelected("בחרו סוגי נכסים") }
         if (counter > 1) { setAssetOptionsSelected((counter === 4 ? 3 : counter) + " סוגי נכסים") }
         else { setAssetOptionsSelected(dataSent[0]) }
-
-        // will also nn to place value inside state to use once form is submitted
+        setAssetSearchOption(dataSent)
     }
-    const onAttemptSearch = async (e) => {
+    const onAttemptSearch = (e) => {
         e.preventDefault()
-
-        // will nn to gather all data from searchbar and send it up
-        let searchData = {}
+        let allInputs = document.getElementsByClassName("search-bar")[0].getElementsByClassName("text_input")
+        let searchData = {
+            locationData: allInputs[0].value,
+            minimumPriceRange: allInputs[5].value,
+            maximumPriceRange: allInputs[6].value,
+            assetTypeSearchOptions: assetSearchOptions,
+            minimumRoomRange: minimumRange,
+            maximumRoomRange: maximumRange,
+        }
         onSearchAttempt(searchData)
     }
     const onConfirmAdvancedSearch = (searchData) => {
-        // will nn to add search data to other categories from here
-        // then send it up to be search on the home comp
-        // which will then filter the shown adverts according to the search values
-        let advancedSearchData = { ...searchData, }
+        let allInputs = document.getElementsByClassName("search-bar")[0].getElementsByClassName("text_input")
+        let regSearchData = {
+            locationData: allInputs[0].value,
+            minimumPriceRange: allInputs[5].value,
+            maximumPriceRange: allInputs[6].value,
+            assetTypeSearchOptions: assetSearchOptions,
+            minimumRoomRange: minimumRange,
+            maximumRoomRange: maximumRange,
+        }
+        let advancedSearchData = { ...searchData, ...regSearchData }
         onSearchAttempt(advancedSearchData)
     }
     return (
@@ -147,17 +159,16 @@ const SearchBar = ({ onSearchAttempt }) => {
                             {isPriceValid ? "" : <PriceModal closeModal={closeModal} />}
                         </div>
                     </li>
-                    <li className="search-column advanced-search">
-                        <button onClick={onAdvancedSearchClick} className="advanced-search-button">חיפוש מתקדם</button>
-                        {didClickAdvancedSearch ? <AdvancedSearch onConfirmAdvancedSearch={onConfirmAdvancedSearch} /> : ""}
-                    </li>
                     <li className="search-column">
-                        <button type="submit" className="default-button">
+                        <button onClick={onAttemptSearch} type="submit" className="default-button">
                             <svg className="svg-search-icon" role="img" viewBox="0 0 19.9 19.7">
                                 <g fill="none" stroke="white"><path strokeLinecap="square" d="M18.5 18.3l-5.4-5.4" /><circle cx="8" cy="8" r="7" /></g>
                             </svg>     <span>חיפוש</span>
                         </button>
-
+                    </li>
+                    <li className="search-column advanced-search">
+                        <button onClick={onAdvancedSearchClick} className="advanced-search-button">חיפוש מתקדם</button>
+                        {didClickAdvancedSearch ? <AdvancedSearch onConfirmAdvancedSearch={onConfirmAdvancedSearch} /> : ""}
                     </li>
                 </ul>
             </form>

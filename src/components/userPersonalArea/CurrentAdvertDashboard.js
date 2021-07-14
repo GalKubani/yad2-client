@@ -6,6 +6,7 @@ const headerNames = ["סוג הנכס", "כתובת", "איש קשר", "מחיר
 const CurrentAdvertDashboard = ({ userAdverts }) => {
 
     const [currentAdvert, setCurrentAdvert] = useState({})
+    const [areAdvertsShown, setAreAdvertsShown] = useState(true)
     const [isAdvertClicked, setIsAdvertClicked] = useState(false)
     const [isAdvertEditClicked, setIsAdvertEditClicked] = useState(false)
 
@@ -17,6 +18,7 @@ const CurrentAdvertDashboard = ({ userAdverts }) => {
             if (advert._id + "" === e.target.parentElement.id) {
                 setCurrentAdvert(advert)
                 setIsAdvertClicked(!isAdvertClicked)
+                setAreAdvertsShown(false)
             }
         }
     }
@@ -24,12 +26,12 @@ const CurrentAdvertDashboard = ({ userAdverts }) => {
         <div className="adverts-table">
             <table cellSpacing="0" cellPadding="0">
                 <tbody>
-                    <tr className="table-headers">
+                    {document.documentElement.clientWidth > 450 ? <tr className="table-headers">
                         {headerNames.map((title, index) => {
                             return (<th className={index === 1 ? "address-table" : ""} key={title}>{title}</th>)
                         })}
-                    </tr>
-                    {userAdverts.map((advert) => {
+                    </tr> : ""}
+                    {document.documentElement.clientWidth > 450 ? userAdverts.map((advert) => {
                         return (
                             <tr id={advert._id} onClick={onRowClick} key={advert._id} className="table-advert">
                                 <td>{advert.assetType} </td>
@@ -44,9 +46,25 @@ const CurrentAdvertDashboard = ({ userAdverts }) => {
                                 <td>{advert.isAdvertActive ? "פעילה" : "לא פעילה"}</td>
                             </tr>
                         )
+                    }) : areAdvertsShown && userAdverts.map((advert) => {
+                        return (<tr onClick={onRowClick} key={advert._id} className="mobile-advert">
+                            <td id={advert._id} className="img-wrapper-user"><img alt="" src={advert.assetPictures[0] || "https://my.yad2.co.il//newOrder/images/publish/selectImage.png"}></img></td>
+                            <td id={advert._id} className="mobile-advert-text">
+                                <div className="bold">{advert.assetCity}</div>
+                                <div>עדכון אחרון:{new Date(advert.updatedAt).toLocaleDateString("he-IL")}</div>
+                                <div className="bold">מחיר: {advert.assetPrice ? (advert.assetPrice.toLocaleString()) + "₪" : "לא צוין"}</div>
+                                <div>{advert.isAdvertActive ? "פעילה" : "לא פעילה"}</div>
+                            </td>
+                            <td> <button className="edit-mobile" onClick={() => {
+                                setCurrentAdvert(advert)
+                                setIsAdvertClicked(false)
+                                setIsAdvertEditClicked(true)
+                                setAreAdvertsShown(false)
+                            }}><span></span></button></td>
+                        </tr>)
                     })}
-                    {isAdvertClicked && <MyAdvert userAdvertsNumber={userAdverts.length} setIsAdvertEditClicked={setIsAdvertEditClicked} setIsAdvertClicked={setIsAdvertClicked} currentAdvert={currentAdvert} />}
-                    {isAdvertEditClicked && <EditAdvert setIsAdvertEditClicked={setIsAdvertEditClicked} setIsAdvertClicked={setIsAdvertClicked} userAdvertsNumber={userAdverts.length} currentAdvert={currentAdvert} />}
+                    {isAdvertClicked && <MyAdvert setAreAdvertsShown={setAreAdvertsShown} userAdvertsNumber={userAdverts.length} setIsAdvertEditClicked={setIsAdvertEditClicked} setIsAdvertClicked={setIsAdvertClicked} currentAdvert={currentAdvert} />}
+                    {isAdvertEditClicked && <EditAdvert setAreAdvertsShown={setAreAdvertsShown} setIsAdvertEditClicked={setIsAdvertEditClicked} setIsAdvertClicked={setIsAdvertClicked} userAdvertsNumber={userAdverts.length} currentAdvert={currentAdvert} />}
                 </tbody>
             </table>
         </div>

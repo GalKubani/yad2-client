@@ -80,3 +80,27 @@
 .red{
     border:1px solid red!important;
 }
+@media(max-width:400px){
+    .wider{
+        width: 85%;
+    }
+    .data-container-whitebox{
+        label{
+            margin-left: 70%;
+        }
+        select{
+            width: 85%;
+        }
+        h2{
+            padding-right:10%;
+            margin-bottom:20px;
+        }
+        .mini-text{
+            white-space:unset;
+        }
+        textarea{
+            padding: 20px 15px;
+            width: unset;
+        }
+    }
+}

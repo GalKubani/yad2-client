@@ -67,3 +67,8 @@
 .question-input .question-title .question{
     position: relative;
 }
+@media (max-width:400px){
+    .question{
+        display: none;
+    }
+}

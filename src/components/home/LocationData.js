@@ -10,7 +10,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
                 let optionName = optionNameAndCity[0].split("שכ")[1].trim()
 
                 return (
-                    <li onClick={(selectOptionClick)} key={option} className="location-option">
+                    <li value={"neighborhood"} onClick={(selectOptionClick)} key={option} className="location-option">
                         {<SearchOptionBoldValue optionName={optionName} optionNameAndCity={optionNameAndCity} currentSearchValue={currentSearchValue} />}
                         <div className="location-category">שכונה</div>
                     </li>)
@@ -19,7 +19,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
             {cityOptionsShown.map((option) => {
                 let optionName = option
                 return (
-                    <li onClick={(selectOptionClick)} key={option} className="location-option">
+                    <li value={"city"} onClick={(selectOptionClick)} key={option} className="location-option">
                         {<SearchOptionBoldValue optionName={optionName} optionNameAndCity={["", ""]} currentSearchValue={currentSearchValue} />}
                         <div className="location-category">עיר</div>
                     </li>)
@@ -30,7 +30,7 @@ const LocationData = ({ selectOptionClick, currentSearchValue, neighborhoodOptio
                 let optionNameAndCity = option.split("//")
                 let optionName = optionNameAndCity[0]
                 return (
-                    <li onClick={(selectOptionClick)} key={option} className="location-option">
+                    <li value={"street"} onClick={(selectOptionClick)} key={option} className="location-option">
                         {<SearchOptionBoldValue optionName={optionName} optionNameAndCity={optionNameAndCity} currentSearchValue={currentSearchValue} />}
                         <div className="location-category">רחוב</div>
                     </li>)

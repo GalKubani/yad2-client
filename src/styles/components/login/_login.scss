@@ -177,3 +177,21 @@
 .invalid-message{
     color: #ff2a2b;
 }
+@media(max-width:400px){
+    .modal-container{
+        flex-direction: column;
+        justify-content: unset;
+    }
+    .modal-right-display{
+        width: unset;
+        padding: 15px;
+    }
+    .login-modal{
+        position: unset;
+        width: 100%;
+        margin-bottom: 100px;
+    }
+    .header-login{
+        color: black;
+    }
+}

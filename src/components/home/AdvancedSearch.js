@@ -3,7 +3,7 @@ import Calendar from 'react-calendar'
 import RangeDropdown from '../main/RangeDropdown'
 
 
-const checkboxOptions = ["חניה", "מעלית", "מרפסת", "מיזוג", "משופצת", "מרוהטת"]
+const checkboxOptions = ["מיזוג", "דוד שמש", "ריהוט", "מעלית", "ממד", "משופצת"]
 const floorsOption = ["הכל"]
 for (let i = 1; i <= 12; i += 1) { floorsOption.push(i) }
 const AdvancedSearch = ({ onConfirmAdvancedSearch }) => {
@@ -38,9 +38,23 @@ const AdvancedSearch = ({ onConfirmAdvancedSearch }) => {
         sizeInputs[1].value = ""
     }
     const onAdvancedSearch = (e) => {
-        // will nn to take all the data from here up to search bar, and start search with all parameters
-        // from both components, will also nn to see how to implement range categories
-        let searchData = {}
+        let assetCharecteristics = []
+        let sizeInputs = document.getElementsByClassName("range-input")[0].getElementsByTagName("input")
+        let allCheckboxes = document.getElementsByClassName("advanced-search-container")[0].getElementsByClassName("checkbox")
+        let floorInputs = document.getElementsByClassName("dropdown_content room-range")[1].getElementsByTagName("input")
+        for (let box of allCheckboxes) {
+            if (box.checked) {
+                assetCharecteristics.push(box.value)
+            }
+        }
+        let searchData = {
+            assetCharecteristics,
+            minimumSizeRange: sizeInputs[0].value,
+            maximumSizeRange: sizeInputs[1].value,
+            minimumFloorRange: floorInputs[0].value,
+            maximumFloorRange: floorInputs[1].value,
+            dateOfEntry: dateValue.toLocaleDateString("he-IL") !== new Date().toLocaleDateString("he-IL") ? dateValue : ""
+        }
         onConfirmAdvancedSearch(searchData)
     }
     return (

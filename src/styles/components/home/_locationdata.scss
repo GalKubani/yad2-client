@@ -12,10 +12,8 @@
         font-size: 14px;
         line-height: 30px;
         padding: 0 10px;
-
     }
 }
-
 .location-option{
     max-width: 100%;
     padding: 11px 10px;
@@ -43,4 +41,12 @@
     line-height: 30px;
     padding: 0 10px;
     max-width: 100%;
+}
+@media(max-width:400px){
+    .location{
+        min-width: 300px;
+    }
+    .location-option{
+        width: 300px;
+    }
 }
