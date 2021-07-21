@@ -26,12 +26,12 @@ const CurrentAdvertDashboard = ({ userAdverts }) => {
         <div className="adverts-table">
             <table cellSpacing="0" cellPadding="0">
                 <tbody>
-                    {document.documentElement.clientWidth > 450 ? <tr className="table-headers">
+                    {document.documentElement.clientWidth > 900 ? <tr className="table-headers">
                         {headerNames.map((title, index) => {
                             return (<th className={index === 1 ? "address-table" : ""} key={title}>{title}</th>)
                         })}
                     </tr> : ""}
-                    {document.documentElement.clientWidth > 450 ? userAdverts.map((advert) => {
+                    {document.documentElement.clientWidth > 900 ? userAdverts.map((advert) => {
                         return (
                             <tr id={advert._id} onClick={onRowClick} key={advert._id} className="table-advert">
                                 <td>{advert.assetType} </td>

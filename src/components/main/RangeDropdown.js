@@ -21,16 +21,20 @@ const RangeDropdown = ({ labelClassName = "", dropName, dropInterval, optionRang
         let dropdownContent = e.target.nextElementSibling?.classList.contains("dropdown_content") ? e.target.nextElementSibling : undefined
             || e.target.parentElement.nextElementSibling?.classList.contains("dropdown_content") ? e.target.parentElement.nextElementSibling : undefined
                 || e.target.nextElementSibling.nextElementSibling?.classList.contains("dropdown_content") ? e.target.nextElementSibling.nextElementSibling : undefined
-        let arrow = e.target.firstElementChild?.classList.contains("arrow") ?
-            e.target.firstElementChild : undefined ||
-                e.target.classList.contains("arrow") ? e.target : e.target.nextElementSibling
+        let arrow
+        console.log(e.target)
+        if (e.target.classList.contains("arrow-wrap")) { arrow = e.target }
+        else if (e.target.firstElementChild?.classList.contains("arrow-wrap")) { arrow = e.target.firstElementChild }
+        else { arrow = e.target.nextElementSibling }
         if (!arrow) { arrow = e.target.previousElementSibling }
-        if (arrow.classList.contains("arrow-click")) {
-            arrow.classList.remove("arrow-click")
+        if (arrow.classList.contains("down")) {
+            arrow.classList.remove("down")
+            arrow.classList.add("up")
             dropdownContent.style.display = "none"
         }
         else {
-            arrow.classList.add("arrow-click")
+            arrow.classList.add("down")
+            arrow.classList.remove("up")
             dropdownContent.style.display = "flex"
         }
     }
@@ -72,11 +76,11 @@ const RangeDropdown = ({ labelClassName = "", dropName, dropInterval, optionRang
         <li className="search-column">
             <div><label className={labelClassName}>{dropName}</label></div>
             <button onClick={onRoomsClick} className="text_input smaller placeholder">
-                <div className="arrow">^</div> <span className="range-value">{dropName}</span>
+                <div className="arrow-wrap up"></div> <span className="range-value">{dropName}</span>
             </button>
             <div className="dropdown_content room-range">
                 <input onClick={onRoomsClick} type="text" autoComplete="off" placeholder="מ-" className="text_input" />
-                <div onClick={onRoomsClick} className="arrow from">^</div>
+                <div onClick={onRoomsClick} className="arrow-wrap relative-pos up"></div>
                 <div className="dropdown_content inside">
                     <ul className="room-list">
                         {currentRoomRange.map((value) => {
@@ -85,7 +89,7 @@ const RangeDropdown = ({ labelClassName = "", dropName, dropInterval, optionRang
                     </ul>
                 </div>
                 <input onClick={onRoomsClick} type="text" autoComplete="off" placeholder="עד-" className="text_input" />
-                <div onClick={onRoomsClick} className="arrow max">^</div>
+                <div onClick={onRoomsClick} className="arrow-wrap relative-pos up"></div>
                 <div className="dropdown_content  inside-left">
                     <ul className="room-list">
                         {currentRoomRange.map((value) => {

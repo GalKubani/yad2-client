@@ -32,7 +32,8 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         e.preventDefault()
         let allInputs = e.target.getElementsByTagName("input")
         let allCheckboxes = e.target.getElementsByClassName("checkbox-wrapper box-active")
-        let assetCondition = e.target.getElementsByTagName("select")[0]
+        let assetCondition = e.target.getElementsByTagName("select")[1]
+        let isAdvertActive = e.target.getElementsByTagName("select")[0].value
         let textArea = e.target.getElementsByTagName("textarea")[0]
         let allRadioOptions = e.target.getElementsByClassName("radio_input")
         let assetCharecteristics = [], assetPictures = [], removedPicsKeys = []
@@ -59,7 +60,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         if (!allInputs[17].value || !allInputs[18].value) { return }
         let dateOfEntry = dateValue.toLocaleDateString("he-IL", { month: "2-digit", day: "2-digit" })
         let advertData = {
-            assetTotalParking, assetTotalPorchs,
+            assetTotalParking, assetTotalPorchs, isAdvertActive,
             assetDetails: textArea.value, assetCharecteristics,
             assetCondition: assetCondition.value || currentAdvert.assetCondition, assetBuiltSize: allInputs[4].value,
             assetPrice: allInputs[15].value * 1, dateOfEntry,

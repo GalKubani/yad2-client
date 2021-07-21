@@ -24,9 +24,15 @@ const SearchBar = ({ onSearchAttempt }) => {
 
     const onAssetsClick = (e) => {
         setDidClickOnAssets(!didClickOnAssets)
-        let arrow = e.target.firstElementChild
-        if (arrow.classList.contains("arrow-click")) { arrow.classList.remove("arrow-click") }
-        else { arrow.classList.add("arrow-click") }
+        let arrow = e.target.firstElementChild || e.target
+        if (arrow.classList.contains("up")) {
+            arrow.classList.remove("up")
+            arrow.classList.add("down")
+        }
+        else {
+            arrow.classList.remove("down")
+            arrow.classList.add("up")
+        }
     }
     const onAdvancedSearchClick = (e) => {
         e.preventDefault()
@@ -39,12 +45,14 @@ const SearchBar = ({ onSearchAttempt }) => {
         if (e.target.classList.contains("checkbox-label") || e.target.parentElement.classList.contains("checkbox-label")) { return }
         let dropdown = document.getElementsByClassName("dropdown_content")
         let arrows = document.getElementsByClassName("arrow-click")
-        for (let arrow of arrows) { arrow.classList.remove("arrow-click") }
+        for (let arrow of arrows) {
+            arrow.classList.add("up")
+            arrow.classList.remove("down")
+        }
         for (let content of dropdown) { content.style.display = "none" }
     }
     const selectOptionClick = (e) => {
         e.stopPropagation()
-        // will nn to account for which category was selected
         if (e.target.classList.contains("location-category")) {
             e.target.parentElement.parentElement.parentElement.previousElementSibling.value = e.target.previousElementSibling.innerText
             e.target.parentElement.parentElement.parentElement.style.display = "none"
@@ -147,7 +155,9 @@ const SearchBar = ({ onSearchAttempt }) => {
                     </li>
                     <li className="search-column">
                         <label>סוג נכס</label>
-                        <button onClick={onAssetsClick} className="text_input placeholder bigger">{assetOptionsSelected} <div className="arrow">^</div></button>
+                        <button onClick={onAssetsClick} className="text_input placeholder bigger">{assetOptionsSelected}
+                            <div className="arrow-wrap up"></div>
+                        </button>
                         {didClickOnAssets ? <AssetDropdown onReturnData={onReturnData} /> : ""}
                     </li>
                     <RangeDropdown minimumRange={minimumRange} setMinimumRange={setMinimumRange} maximumRange={maximumRange} setMaximumRange={setMaximumRange} dropName="חדרים" dropInterval={0.5} optionRange={roomRange} />

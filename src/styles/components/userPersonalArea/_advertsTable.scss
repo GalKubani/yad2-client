@@ -30,6 +30,7 @@
 }
 .my-advert-container{
     display:flex;
+    direction: ltr;
     padding: 5px;
     flex-wrap: wrap;
     width: 100%;
@@ -155,6 +156,11 @@
     border: none;
     color: #ff6600;
     font-size: 2rem;
+    cursor: pointer;
+    span{
+        position: relative;
+        right: 20px;
+    }
     span::before{
         content: "✎";
     }
@@ -190,6 +196,7 @@
 }
 .mobile-advert{
     height: 83px;
+    cursor: pointer;
     font-size: 14px;
     .img-wrapper-user{
         width: 100px;
@@ -208,7 +215,7 @@
 .mobile-advert-text{
     font-size: 14px;
 }
-@media (max-width:400px){
+@media (max-width:900px){
     .personal-area-container{
         width: 100%;
     }
@@ -224,6 +231,7 @@
     }
     .my-advert-container{
         padding: 0;
+        direction: revert;
         flex-direction: column;
         .my-advert-pictures,.my-advert-management,.my-advert-content{
             width: 100%;
@@ -238,6 +246,7 @@
         }
     }
     .my-advert-management{
+        cursor: pointer;
         position: fixed;
         bottom: 0;
         z-index: 9;

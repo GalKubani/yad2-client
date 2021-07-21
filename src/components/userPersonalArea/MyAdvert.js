@@ -9,7 +9,7 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
     const { userData } = useContext(LoginContext)
 
     useEffect(() => {
-        document.documentElement.clientWidth > 450 ? window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 }) : console.log("")
+        document.documentElement.clientWidth > 900 ? window.scroll({ behavior: 'smooth', top: (userAdvertsNumber * 34) + 270 }) : console.log("")
         setIsImmidiateEntrence(calculateDate(currentAdvert.dateOfEntry))
     }, [currentAdvert, userAdvertsNumber])
 
@@ -31,7 +31,6 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
                 })
             } catch (err) { console.log(err) }
         }
-
     }
     const onDeleteAdvert = async (e) => {
         e.preventDefault()
@@ -99,7 +98,7 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
                             </div>
                         </div>
                     </div>
-                    {document.documentElement.clientWidth > 450 ? <div className="my-advert-management">
+                    {document.documentElement.clientWidth > 900 ? <div className="my-advert-management">
                         <div className="my-content-title">ניהול</div>
                         <button onClick={onClickEdit} className="edit-button"> <span>עריכת פרטים</span> </button>
                         <div className="edit-status-container">

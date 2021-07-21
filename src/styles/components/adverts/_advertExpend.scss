@@ -114,14 +114,11 @@
 .modal-pictures::after{
     opacity: 1;
 }
-@media(max-width:400px){
+@media(max-width:1000px){
     .advert-expanded-blank{
         display: none;
     }
-    .abs{
-        right:170px;
-        top:140px;
-    }
+
     .unset-width{
         overflow: hidden;
         width: calc(100% - 212px);
@@ -129,11 +126,7 @@
     .asset-description-container{
         width: 100%;
     }
-    .show-number-button{
-        width: 140px;
-        bottom: 50px;
-        right:210px;
-    }
+
     .visible{
         width: 320px;
         height: 360px;
@@ -141,5 +134,16 @@
     .expanded-image{
         width: 320px;
         height: 360px;
+    }
+}
+@media(max-width:680px){
+    .abs{
+        right:170px;
+        top:140px;
+    }
+    .show-number-button{
+        width: 140px;
+        bottom: 50px;
+        right:210px;
     }
 }

@@ -22,18 +22,10 @@ const Header = () => {
     return (
         <div className="header">
             {isLoginClicked ? <LoginPage onLoginClick={onLoginClick} /> : ""}
-            {document.documentElement.clientWidth > 450 ? <div className="header__nav">
+            {document.documentElement.clientWidth > 620 ? <div className="header__nav">
                 <NavLink className="home-nav" to="/home">
                     <img alt="לוגו" className="yad-2-logo" src="https://assets.yad2.co.il/yad2site/y2assets/images/header/yad2Logo.png"></img>
                 </NavLink>
-                <button onClick={onToggleClick} className="toggle-button">
-                    <div className="toggle-bar-wrapper">
-                        <span className="toggle-button__bar"></span>
-                        <span className="toggle-button__bar"></span>
-                        <span className="toggle-button__bar"></span>
-                    </div>
-                    <div className="toggle-text"> תפריט </div>
-                </button>
                 <ul className="header-left">
                     <li className="header-list-item">
                         <svg xmlns="http://www.w3.org/2000/svg" className="login-button" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">

@@ -189,7 +189,7 @@
         line-height: 1.0625rem;
     }
 }
-@media(max-width:400px){
+@media(max-width:1000px){
     .adverts-display-container{
         flex-direction: column;
     }
@@ -215,5 +215,9 @@
     }
     .advert-sort-container{
         text-align: center;
+    }
+    .recently-sold{
+        width: 100%;
+        height: 200px;
     }
 }

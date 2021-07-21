@@ -2,7 +2,6 @@
     display: flex;
     padding-top: 30px;
     align-items: flex-end;
-
 }
 .search-bar{
     border-radius: 4px;
@@ -13,6 +12,7 @@
     background-color: #fff;
     box-shadow: 0 2px 6px 0 rgba(0 ,0, 0 , 0.1);
     z-index: 9;
+
 }
 li,ul{
     list-style: none;
@@ -103,27 +103,16 @@ li,ul{
         min-width: inherit;
     }
 }
-.arrow{
-    position: absolute;
-    float: left;
-    line-height: 1.3;
-    cursor: pointer;
-    padding-left: 1px;
-    color: black;
-    transform: rotateZ(180deg) translateX(60px);
-}
-.arrow-click{
-    transform: rotateZ(0deg)translateX(-60px);
-}
 .smaller{
     width: 95px;
 }
+.relative-pos{
+    position: relative;
+    left: 15px;
+    top: 10px;
+}
 .bigger{
     width: 140px;
-    .arrow{
-        right:280px;
-        top:139px;  
-    }
 }
 .placeholder{
     color: #999;
@@ -151,7 +140,8 @@ li,ul{
     padding: 10px;
     white-space: nowrap;
     transition: box-shadow .3s ease-in-out;
-    min-width: 138px;
+    // min-width: 138px;
+    margin-right: 10px;
     position: relative;
 }
 .asset-checkbox{
@@ -164,19 +154,17 @@ li,ul{
     right: 0%;
 }
 .inside{
-    right:calc(50% - 40px);
     top: 70px;
     padding:0px;
 }
 .inside-left{
-    right:calc(50% + 40px);
+    right:50%;
     top: 70px;
     padding:0px;
 }
 .room-list{
     border: 1px solid #ccc;
     max-height: 320px;
-    /* max-height: calc(var(--option-height)*var(--number-of-options-to-display)); */
     overflow-y: scroll;
     overflow-x: hidden;
     border-bottom: 1px solid #ccc;
@@ -193,7 +181,26 @@ li,ul{
 .roomlist-item:hover{
     background-color: #eee
 }
-@media (max-width:400px){
+.arrow-wrap{
+    font-size: 1.125rem;
+    float: left;
+    color: #000;
+    padding-left: 1px;
+    cursor: pointer;
+}
+.arrow-wrap.up::after{
+    content: "˅";
+}
+.arrow-wrap.down::after{
+    content: "˄";
+}
+@media (max-width:900px){
+    .search-bar .search-columns{
+        max-width: unset;
+        flex-wrap: wrap;
+    }
+}
+@media (max-width:420px){
     .search-columns{
         flex-wrap: wrap;
         max-width: unset;
@@ -227,21 +234,5 @@ li,ul{
             margin-top: 15px;
             margin-bottom: 10px;
         }
-        .bigger{
-            .arrow{
-                top: 218px;
-            }
-        }
-        .arrow{
-            right: 100px;
-        }
-        .arrow.from{
-            right: unset;
-        }
-        .arrow.max{
-            width: 8px;
-            right: 90px;
-        }
-
     }
 }
