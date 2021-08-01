@@ -26,7 +26,7 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
         if (e.target.previousElementSibling.value === currentAdvert.isAdvertActive + "") { return }
         else {
             try {
-                await editAdvert({ isAdvertActive: e.target.previousElementSibling.value }, userData.token, currentAdvert._id).then((res) => {
+                await editAdvert({ isAdvertActive: e.target.previousElementSibling.value ? 1 : 0 }, userData.token, currentAdvert._id).then((res) => {
                     document.location.reload()
                 })
             } catch (err) { console.log(err) }
@@ -37,8 +37,7 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
         let answer = window.confirm("האם אתה בטוח שברצונך למחוק הודעה?")
         if (!answer) { return }
         try {
-            await deleteAdvert(userData.token, currentAdvert._id).then((res) => {
-                console.log(res)
+            await deleteAdvert(userData.token, currentAdvert._id).then(() => {
                 document.location.reload()
             })
         }
@@ -47,7 +46,7 @@ const MyAdvert = ({ setAreAdvertsShown, userAdvertsNumber, setIsAdvertEditClicke
     const onJumpAdvert = async (e) => {
         e.preventDefault()
         try {
-            await editAdvert({ assetCharecteristics: currentAdvert.assetCharecteristics + " " }, userData.token, currentAdvert._id).then((res) => {
+            await editAdvert({ assetDetails: currentAdvert.assetDetails + " " }, userData.token, currentAdvert._id).then((res) => {
                 document.location.reload()
             })
         } catch (err) { console.log(err) }

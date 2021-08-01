@@ -9,8 +9,6 @@ const Home = () => {
     const { allAdverts, advertDispatch } = useContext(AdvertContext)
     const [currentlyShownAdverts, setCurrentlyShownAdverts] = useState([])
     document.getElementsByTagName("title")[0].innerHTML = `נדל"ן למכירה יד2 | אלפי מודעות חדשות בכל יום`
-
-
     const onSearchAttempt = (searchData) => {
         let currentAdverts = allAdverts
         const filterRange = (min, max, value) => {
@@ -25,7 +23,6 @@ const Home = () => {
             if (!filterRange(searchData.minimumPriceRange, searchData.maximumPriceRange, advert.assetPrice)) { return false }
             if (!filterRange(searchData.minimumRoomRange, searchData.maximumRoomRange, advert.assetTotalRooms)) { return false }
             if (searchData.locationData.includes(",")) {
-                console.log("here")
                 let option = searchData.locationData.slice(0, searchData.locationData.indexOf(",")).trim()
                 let city = searchData.locationData.slice(searchData.locationData.indexOf(",") + 1).trim()
                 if (city !== advert.assetCity && (option !== advert.assetStreet || option !== advert.assetNeighborhood)) {

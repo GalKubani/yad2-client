@@ -69,7 +69,7 @@ const EditAdvert = ({ setIsAdvertEditClicked, setIsAdvertClicked, currentAdvert 
         try {
             await uploadMediaToS3(mediaData, userData.token, currentAdvert._id).then(async (res) => {
                 deleteMediaFromS3(removedPicsKeys)
-                advertData.assetPictures = [...existingImages, ...res]
+                console.log(advertData)
                 await editAdvert(advertData, userData.token, currentAdvert._id).then((res) => {
                     document.location.reload()
                 })

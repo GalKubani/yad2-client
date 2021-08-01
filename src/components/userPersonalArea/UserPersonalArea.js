@@ -24,14 +24,13 @@ const UserPersonalArea = () => {
             <PersonalAreaNavbar />
             <div className="personal-area-main-wrapper">
                 <div className="text-wrapper">
-                    <p>שלום {userData.user.name || userData.user.email[0]}!, יש לך {userAdverts.length} מודעות פעילות</p>
+                    <p>שלום {userData.user.firstName || userData.user.email[0]}!, יש לך {userAdverts.length} מודעות פעילות</p>
                     <p>כאן תוכל/י לבצע שינויים על המודעות שלך</p>
                     <p>למשל למחוק, לעדכן ולהקפיץ את מודעתך למקום גבוה יותר בלוח.</p>
                 </div>
             </div>
             <CurrentAdvertDashboard userAdverts={userAdverts} />
         </div>
-
     )
 }
 

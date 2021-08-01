@@ -16,9 +16,9 @@ const Header = () => {
         deleteUserFromCookie()
         history.push("/home")
     }
+    console.log(userData)
     const onToggleClick = () => { setIsToggleClicked(!isToggleClicked) }
     const onLoginClick = () => { setIsLoginClicked(!isLoginClicked) }
-
     return (
         <div className="header">
             {isLoginClicked ? <LoginPage onLoginClick={onLoginClick} /> : ""}
@@ -43,7 +43,7 @@ const Header = () => {
                     <li className="header-list-item">
                         {userData.user ?
                             <div className="user-header-content">
-                                <span className="initials">{userData.user.name[0] || userData.user.email[0]}</span>
+                                <span className="initials">{userData.user.firstName !== null ? userData.user.firstName[0] || userData.user.email[0] : userData.user.email[0]}</span>
                                 <ul className="user-dropdown">
                                     <li className="user-option">
                                         <NavLink className="header__nav-text" to="/personal-area">
@@ -85,9 +85,9 @@ const Header = () => {
                                 <div className="mobile-user-on">
                                     <li className="user-option" onClick={onClickLogout}> התנתקות </li>
                                     <div className="option-wrapper">
-                                        <div className="user-header-content"><span className="initials">{userData.user.name[0] || userData.user.email[0]}</span>  </div>
+                                        <div className="user-header-content"><span className="initials">{userData.user.firstName !== null ? userData.user.firstName[0] || userData.user.email[0] : userData.user.email[0]}</span>  </div>
                                         <div>
-                                            {userData.user.name ? <span className="bold">{userData.user.name}</span> : ""}
+                                            {userData.user.firstName ? <span className="bold">{userData.user.firstName}</span> : ""}
                                             <br></br>
                                             <NavLink onClick={onToggleClick} className="header__nav-text" to="/personal-area"> לאזור האישי </NavLink>
                                         </div>

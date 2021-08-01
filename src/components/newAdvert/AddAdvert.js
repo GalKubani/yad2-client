@@ -55,13 +55,13 @@ const AddAdvert = () => {
             console.log("creating advert")
             try {
                 await addNewAdvert(advertData, userData.token).then(async (res) => {
-                    await uploadMediaToS3(mediaFormData, userData.token, res._id).then((res) => {
+                    console.log("uploading media")
+                    console.log(mediaFormData)
+                    await uploadMediaToS3(mediaFormData, userData.token, res.ID).then(() => {
                         history.push("/home")
                     })
                 })
-            } catch (err) {
-                console.log(err)
-            }
+            } catch (err) { console.log(err) }
         }
     }
     return (

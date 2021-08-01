@@ -27,7 +27,7 @@ export const getCityDataFromDB = async (searchValue) => {
 };
 export const subscribeToSite = async (email, password) => {
     try {
-        const res = await Axios.post(DB_URL + `/users/add`, { email, password })
+        const res = await Axios.post(DB_URL + `/sql/users/add`, { email, password })
         return res.data
     } catch (err) {
         throw new Error(err);
@@ -35,7 +35,7 @@ export const subscribeToSite = async (email, password) => {
 }
 export const loginToDB = async (email, password) => {
     try {
-        const res = await Axios.post(DB_URL + "/users/login", { email, password })
+        const res = await Axios.post(DB_URL + "/sql/users/login", { email, password })
         return res.data;
     } catch (err) {
         throw new Error(err);
@@ -43,7 +43,7 @@ export const loginToDB = async (email, password) => {
 }
 export const getAllAdverts = async () => {
     try {
-        const res = await Axios.get(DB_URL + "/adverts/get-all")
+        const res = await Axios.get(DB_URL + "/sql/adverts/get-all")
         return res.data
     } catch (err) {
         throw new Error(err)
@@ -51,7 +51,7 @@ export const getAllAdverts = async () => {
 }
 export const editPersonalData = async (updatedData, token) => {
     try {
-        const res = await Axios.patch(DB_URL + "/users/me", updatedData, {
+        const res = await Axios.patch(DB_URL + "/sql/users/me", updatedData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -63,7 +63,7 @@ export const editPersonalData = async (updatedData, token) => {
 }
 export const addNewAdvert = async (formData, token) => {
     try {
-        const res = await Axios.post(DB_URL + "/adverts/new", formData, {
+        const res = await Axios.post(DB_URL + "/sql/adverts/new", formData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -109,7 +109,7 @@ export const addAdvertMedia = async (mediaData, token, advertId) => {
 }
 export const findUserAdverts = async (token) => {
     try {
-        const res = await Axios.get(DB_URL + "/adverts/get-user", {
+        const res = await Axios.get(DB_URL + "/sql/adverts/get-user", {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -121,8 +121,7 @@ export const findUserAdverts = async (token) => {
 }
 export const editAdvert = async (advertData, token, advertId) => {
     try {
-
-        const res = await Axios.patch(DB_URL + "/adverts/edit?id=" + advertId, advertData, {
+        const res = await Axios.patch(DB_URL + "/sql/adverts/edit?id=" + advertId, advertData, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -134,7 +133,7 @@ export const editAdvert = async (advertData, token, advertId) => {
 }
 export const deleteAdvert = async (token, advertId) => {
     try {
-        const res = await Axios.delete(DB_URL + "/adverts/delete?id=" + advertId, {
+        const res = await Axios.delete(DB_URL + "/sql/adverts/delete?id=" + advertId, {
             headers: {
                 'Authorization': 'Bearer ' + token
             }
@@ -152,7 +151,7 @@ export const uploadMediaToS3 = async (formData, token, advertId) => {
                 parsedData.append("assetPictures", file)
             }
         }
-        let res = await Axios.post(DB_URL + "/adverts/add-pictures?id=" + advertId, parsedData, {
+        let res = await Axios.post(DB_URL + "/sql/adverts/add-pictures?id=" + advertId, parsedData, {
             headers: {
                 "Content-Type": 'multipart/form-data',
                 'Authorization': 'Bearer ' + token

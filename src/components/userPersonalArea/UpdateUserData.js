@@ -61,7 +61,6 @@ const UpdateUserData = () => {
             if (a.indexOf(value) <= b.indexOf(value)) { return -1 }
             else return 1
         })
-        // Might nn to splice before returning
         return filteredData
     }
     const selectCityOptionClick = async (value) => {
@@ -89,20 +88,21 @@ const UpdateUserData = () => {
         e.preventDefault()
         let allInputs = e.target.getElementsByTagName("input")
         let formBody = {
-            name: allInputs[0].value || userData.user.name,
-            lastName: allInputs[1].value || userData.user.lastName,
-            city: allInputs[2].value || userData.user.city,
-            neighborhood: allInputs[3].value || userData.user.neighborhood,
-            street: allInputs[4].value || userData.user.street,
-            houseNumber: allInputs[5].value || userData.user.houseNumber,
-            mainPhone: allInputs[6].value || userData.user.mainPhone,
-            secondaryPhone: allInputs[7].value || userData.user.secondaryPhone,
-            dateOfBirth: allInputs[8].value || userData.user.dateOfBirth,
-            email: allInputs[9].value || userData.user.email,
+            firstName: allInputs[0].value || userData.user.firstName || '',
+            lastName: allInputs[1].value || userData.user.lastName || '',
+            city: allInputs[2].value || userData.user.city || '',
+            neighborhood: allInputs[3].value || userData.user.neighborhood || '',
+            street: allInputs[4].value || userData.user.street || '',
+            houseNumber: allInputs[5].value || userData.user.houseNumber || '',
+            mainPhone: allInputs[6].value || userData.user.mainPhone || '',
+            secondaryPhone: allInputs[7].value || userData.user.secondaryPhone || '',
+            dateOfBirth: allInputs[8].value || userData.user.dateOfBirth || '',
+            email: allInputs[9].value || userData.user.email || '',
         }
         if (!validator.isEmail(allInputs[9].value)) { formBody.email = userData.user.email }
         if (allInputs[10].value) { formBody.password = allInputs[10].value }
         try {
+            console.log(formBody)
             await editPersonalData(formBody, userData.token).then((res) => {
                 saveUserOnCookie({ user: res, token: userData.token })
                 loginDispatch(updateUser(res, userData.token))
@@ -132,7 +132,7 @@ const UpdateUserData = () => {
                         <div className="column-content">
                             <ul className="column-list">
                                 <li className="column-list-item">
-                                    <label>*שם פרטי:</label><input defaultValue={currentUser.name} type="text" />
+                                    <label>*שם פרטי:</label><input defaultValue={currentUser.firstName} type="text" />
                                 </li>
                                 <li className="column-list-item">
                                     <label>*שם משפחה:</label>
